@@ -1,0 +1,47 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block problems %}  
+<link rel="stylesheet" href="{% static 'css/problems.css' %}">
+<div class="problems-container">
+    <div class="problems-header">
+        <h1>Задачки</h1>
+    </div>
+
+    {% if problems %}
+        <table class="problems-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Difficulty</th>
+                    <th>Created</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for problem in problems %}
+                <tr>
+                    <td>
+                        <a href="{{ problem.get_absolute_url }}" class="problem-title">
+                            {{ problem.title }}
+                        </a>
+                    </td>
+                    <td>
+                        <span class="difficulty-badge difficulty-{{ problem.difficulty }}">
+                            {{ problem.get_difficulty_display }}
+                        </span>
+                    </td>
+                    <td class="created-date">
+                        {{ problem.created_at|date:"M d, Y" }}
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="no-problems">
+            <h3>No problems yet</h3>
+            <p>Check back later for new challenges!</p>
+        </div>
+    {% endif %}
+</div>
+{% endblock problems %} 

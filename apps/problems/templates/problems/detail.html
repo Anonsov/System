@@ -1,0 +1,135 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% block problems %} 
+<link rel="stylesheet" href="{% static 'css/detail.css' %}">
+{{form.media}}
+<a href="{% url 'problems:ProblemsMainPage' %}" class="back-link">
+    ← Назад к задачам
+</a>
+
+<div class="problem-container">
+    <!-- Левая сторона: Описание задачи -->
+    <div class="left-side">
+        <div class="problem-header">
+            <h1 class="problem-title">{{ problem.title }}</h1>
+            
+            <div class="problem-meta">
+                <span class="difficulty-badge difficulty-{{ problem.difficulty }}">
+                    {{ problem.get_difficulty_display }}
+                </span>
+                
+                <div class="problem-limits">
+                    <div class="limit-item">
+                        <span>⏱️</span>
+                        <span>Время: {{ problem.time_limit_ms }}мс</span>
+                    </div>
+                    <div class="limit-item">
+                        <span>💾</span>
+                        <span>Память: {{ problem.memory_limit_mb }}МБ</span>
+                    </div>
+                </div>
+                
+                <div class="created-date">
+                    Создано: {{ problem.created_at|date:"d M Y" }}
+                </div>
+            </div>
+        </div>
+
+        <div class="problem-content">
+            <div class="problem-section">
+                <h2 class="section-title">Условие задачи</h2>
+                <div class="section-content">{{ problem.statement }}</div>
+                
+                <div class="example-section">
+                    <div class="example-title">Пример:</div>
+                    <div class="example-content">{{ problem.note }}</div>
+                </div>
+            </div>
+
+            <div class="problem-section">
+                <h2 class="section-title">Формат входных данных</h2>
+                <div class="section-content">{{ problem.input_format }}</div>
+            </div>
+
+            <div class="problem-section">
+                <h2 class="section-title">Формат выходных данных</h2>
+                <div class="section-content">{{ problem.output_format }}</div>
+            </div>
+
+            {% if problem.tags.all %}
+            <div class="problem-section">
+                <h2 class="section-title">Теги</h2>
+                <div class="tags-container">
+                    {% for tag in problem.tags.all %}
+                        <a href="#" class="tag">{{ tag.name }}</a>
+                    {% endfor %}
+                </div>
+            </div>
+            {% endif %}
+        </div>
+
+        <div class="submit-section">
+            <div class="file-upload-area">
+                <div class="file-input-wrapper">
+                    <input type="file" id="code-file" class="file-input" accept=".py,.cpp,.java,.js">
+                    <label for="code-file" class="file-label">Выбрать файл</label>
+                </div>
+                <button class="submit-btn">Отправить решение</button>
+            </div>
+            <p class="stats-text">
+                Решений отправлено: <strong>0</strong> | Успешных: <strong>0</strong>
+            </p>
+        </div>
+    </div>
+
+    <div class="right-side">
+        <div class="compiler-section">
+            <h3 class="right-section-title">Компилятор</h3>
+
+            
+            {% if messages %}
+                <div class="messages">
+                    {% for message in messages %}
+                    <div class="alert alert-{{ message.tags }}">
+                        {{ message }}
+                    </div>
+                    {% endfor %}
+                </div>
+            {% endif %}
+                
+
+            <form action="" method="POST">
+                {% csrf_token %}
+                <div class="compiler-controls">
+                    {{form.language}}
+
+                    <button name="run-btn" class="run-btn" type="submit">Запустить</button>
+                </div>
+            
+                
+                <div class="code-editor-wrapper">
+                    {{ form.code_area }}
+                    {% if form.code_area.errors %}
+                        <div class="error-message">{{ form.code_area.errors }}</div>
+                    {% endif %}
+                </div>
+                    
+            </form>
+            
+        </div>
+
+        <div class="tests-section">
+            <h3 class="right-section-title">Тест-кейсы</h3>
+            
+            <div class="test-case">
+                <div class="test-case-title">Тест 1</div>
+                <div><strong>Вход:</strong></div>
+                <div class="test-input">5<br>пока что заглушка</div>
+                <div><strong>Ожидаемый выход:</strong></div>
+                <div class="test-output">пока что заглушка</div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock problems %}
