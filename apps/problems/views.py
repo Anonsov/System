@@ -1,19 +1,15 @@
 from typing import Any
-from django.http import HttpRequest, HttpResponse
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import get_object_or_404
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormMixin
 from django.urls import reverse
 from django.contrib import messages
-
-
-from rest_framework.response import Response
 from .forms import CodeForm
-from .models import Problem, Submission
-from rest_framework import generics, status
-from rest_framework.views import APIView
-from .serializers import ProblemSerializer, SubmissionSerializer
+from .models import Problem
+from apps.submissions.models import Submission
+from rest_framework import generics
+from .serializers import ProblemSerializer
 
 
 class ProblemListView(ListView):
@@ -90,40 +86,8 @@ class ProblemDetailView(FormMixin, DetailView):
             return self.form_invalid(form)
         
         
-class NextPendingSubmissionAPIView(generics.RetrieveAPIView):
-    serializer_class = SubmissionSerializer
-    
-    def get_object(self):
-        submission = Submission.objects.filter(
-            status=Submission.Status.PENDING
-        ).order_by('created_at').first()
-        
-        if submission is None:
-            return None
-        return submission
 
-    
-    def retrieve(self, request, *args, **kwargs):
-        instance = self.get_object()
         
-        if instance is None:
-            return Response(
-                {"detail": "No pending submissions found."},
-                status=status.HTTP_404_NOT_FOUND
-            )
-        serializer = self.get_serializer(instance)
-        return Response(serializer.data)
-        
-
-class UpdateSubmissionAPIView(generics.UpdateAPIView):
-    queryset = Submission.objects.all()
-    serializer_class = SubmissionSerializer
-    lookup_field = "id"
-    def partial_update(self, request, *args, **kwargs):
-        kwargs['partial'] = True
-        return super().partial_update(request, *args, **kwargs)
-    
-
 class ProblemsAPIView(generics.ListAPIView):
     queryset = Problem.objects.all()
     serializer_class = ProblemSerializer
