@@ -1,8 +1,61 @@
 {% extends "base.html" %}
 
-
+{% load static %}
 
 {% block submissions %}
-    this is submissions
+<link rel="stylesheet" href="{% static 'css/problems.css' %}"> 
+<div class="problems-container">
+    <div class="problems-header">
+        <h1>Посылки</h1>
+    </div>
+
+    {% if submissions %}
+        <table class="problems-table">
+            <thead>
+                <tr>
+                    <th>Title</th>
+                    <th>Language</th>
+                    <th>Status</th>
+                    <th>Submitted at</th>
+                    <th>User</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for submission in submissions %}
+                <tr>
+                    <td>
+                        <a href="{{ submission.problem.get_absolute_url }}" class="problem-title">
+                            {{ submission.problem.title }}
+                        </a>
+                    </td>
+                    <td>
+                        <span class="difficulty-badge difficulty-{{ problem.difficulty }}">
+                            {{ submission.language }}
+                        </span>
+                    </td>
+                    <td>
+                        <span class="difficulty-badge difficulty-{{ problem.difficulty }}">
+                            {{ submission.status }}
+                        </span>
+                    </td>
+                    
+                    <td class="created-date">
+                        {{ submission.created_at|date:"M d, Y" }}
+                    </td>
+                    <td>
+                        <span class="difficulty-badge difficulty-{{ problem.difficulty }}">
+                            {{ submission.user.username }}
+                        </span>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    {% else %}
+        <div class="no-problems">
+            <h3>No submissions yet</h3>
+        </div>
+    {% endif %}
+</div>
 {% endblock submissions %}
     
