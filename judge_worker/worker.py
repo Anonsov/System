@@ -18,6 +18,7 @@ API = "http://localhost:8000/api/v1"
 def main():
     runner = Runner(model=Submission)
     while True:
+        
         r = requests.get(f"{API}/submissions/next-pending/")
         if r.status_code == 204:
             time.sleep(4)
@@ -36,10 +37,10 @@ def main():
         time.sleep(3)
 
         # Send results back to the API
-        # requests.post(
-        #     f"{API}/submissions/{sub_id}/update/", json={"results": result}
-        # )
-        # time.sleep(0.5)
+        requests.patch(
+            f"{API}/submissions/{sub_id}/update/", json={"results": result}
+        )
+        time.sleep(3)
 
 if __name__ == "__main__":
     main()
