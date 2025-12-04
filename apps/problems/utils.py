@@ -42,7 +42,7 @@ class Runner:
             
             
     def output_generator(self):
-        input_files = sorted([f for f in os.listdir(self.tests_path)][:4])
+        input_files = sorted([f for f in os.listdir(self.tests_path)])
         for input_file in input_files:
             test_num = input_file.split('.')[0]
             input_path = os.path.join(self.tests_path, input_file)
@@ -112,7 +112,7 @@ class TestcaseReturner:
     
     def show_testcases(self) -> dict:
         testcases = {}
-        for i in range(1, 4):
+        for i in range(2, 5):
             input_path = os.path.join(self.tests_path, f"{i}.in")
             output_path = os.path.join(self.tests_path, f"{i}.out")
             
