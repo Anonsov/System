@@ -1,0 +1,41 @@
+{% extends "base.html" %}
+{% load static %}
+
+{% comment %} <link rel="stylesheet" href="{% static 'css/detail.css' %}"> {% endcomment %}
+{% block submission_detail %}
+    <link rel="stylesheet" href="{% static 'css/submission_detail.css' %}">
+    {{ form.media }}
+    {% if submission %}
+    <div class="submission-detail-container">
+        <h2>Submission #{{ submission.id }}</h2>
+        <table class="submission-table">
+            <tr>
+                <th>User</th>
+                <td>{{ submission.user.username }}</td>
+            </tr>
+            <tr>
+                <th>Problem</th>
+                <td>{{ submission.problem.title }}</td>
+            </tr>
+            <tr>
+                <th>Status</th>
+                <td>{{ submission.status }}</td>
+            </tr>
+            <tr>
+                <th>Language</th>
+                <td>{{ submission.language }}</td>
+            </tr>
+            <tr>
+                <th>Submitted at</th>
+                <td>{{ submission.created_at }}</td>
+            </tr>
+        </table>
+        <h3>Code:</h3>
+        <form>
+            {{ form.code_area }}
+        </form>
+    </div>
+    {% endif %}
+        
+{% endblock submission_detail %}
+    

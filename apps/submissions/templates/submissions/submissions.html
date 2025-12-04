@@ -13,11 +13,12 @@
         <table class="problems-table">
             <thead>
                 <tr>
-                    <th>Title</th>
+                    <th>Problem name</th>
                     <th>Language</th>
                     <th>Status</th>
                     <th>Submitted at</th>
                     <th>User</th>
+                    <th>Details</th>
                 </tr>
             </thead>
             <tbody>
@@ -46,6 +47,11 @@
                         <span class="difficulty-badge difficulty-{{ problem.difficulty }}">
                             {{ submission.user.username }}
                         </span>
+                    </td>
+                    <td>
+                        <a href="{% url 'submissions:RunSubmission' submission.id %}" class="problem-title">
+                            More Info
+                        </a>
                     </td>
                 </tr>
                 {% endfor %}
