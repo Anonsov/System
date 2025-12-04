@@ -8,7 +8,7 @@ from .forms import CodeForm
 from django.urls import reverse
 import shutil
 import os
-from .utils import Runner
+from .utils import Runner, TestcaseReturner
 import uuid
 
 
@@ -27,24 +27,27 @@ class Tag(models.Model):
 
 
 class Problem(models.Model):
-    DIFFICULTY_CHOICES = [
-        ("easy", "Easy"),
-        ("medium", "Medium"),
-        ("hard", "Hard"),
-    ]
+    class Difficulty(models.TextChoices):
+        EASY = "easy", "Easy"
+        MEDIUM = "medium", "Medium"
+        HARD = "hard", "Hard"
+
     
     title = models.CharField(max_length=200)
     uuid = models.UUIDField(unique=True, default=uuid.uuid4, editable=False)
     slug = models.SlugField(unique=True, blank=True)
 
-    difficulty = models.CharField(max_length=10, choices=DIFFICULTY_CHOICES)
-
+    difficulty = models.CharField(
+        max_length=10,
+        choices=Difficulty.choices,
+        default=Difficulty.EASY
+    )
     time_limit_ms = models.PositiveIntegerField(default=1000)
     memory_limit_mb = models.PositiveIntegerField(default=256)
 
     statement = models.TextField()
-    input_format = models.TextField()
-    output_format = models.TextField()
+    input_format = models.TextField(null=True)
+    output_format = models.TextField(null=True)
 
     tags = models.ManyToManyField(Tag, blank=True)
 
@@ -52,8 +55,8 @@ class Problem(models.Model):
     etalon_solution = models.FileField(default=None, null=True)
     generator_test = models.FileField(default=None, null=True)
     checker = models.FileField(default=None, null=True)
-    
-    note = models.TextField(default="")
+    score = models.IntegerField(default=20)
+    note = models.TextField(default="", null=True)
     
     
     def __get_path(self) -> str:
@@ -78,7 +81,19 @@ class Problem(models.Model):
             with open(dest_path, 'wb+') as destination:
                 for chunk in etalon_thing.chunks():
                     destination.write(chunk)
-        
+        else:
+            raise ValueError("Etalon solution or generator test file is missing.")
+    
+    
+    def __make_checker(self, checker_file, directory: str):
+        if checker_file:
+            dest_path = f"{directory}/checkers/{os.path.basename(checker_file.name)}"
+            with open(dest_path, 'wb+') as destination:
+                for chunk in checker_file.chunks():
+                    destination.write(chunk)
+        else:
+            raise ValueError("Checker file is missing.")
+            
             
     def save(self, *args, **kwargs):
         if not self.slug:
@@ -91,7 +106,7 @@ class Problem(models.Model):
         
         #generate generator_task file for a new task
         self.__make_etalons(self.generator_test, directory, is_generator_test=True)
-        
+        self.__make_checker(self.checker, directory)
         solution_path = directory + "/solution/" + self.etalon_solution.name
         generator_path = directory + "/generator/" + self.generator_test.name
         tests_path = directory + "/tests/"
@@ -102,10 +117,13 @@ class Problem(models.Model):
             solution_path=solution_path,
             generator_path=generator_path,
             tests_path=tests_path,
-            score=30
+            score=self.score
         )
-        
+
+        ### running the main generator        
         runner.main_generator()
+        ### running the main generator
+        
 
         super().save(*args, **kwargs)
 
@@ -139,6 +157,16 @@ class Problem(models.Model):
             'category_slug': self.get_category_slug(),
             'slug': self.slug
         })
+        
+        
+    def show_testcases(self):
+        directory = "apps/problems/testcases/" + str(self.uuid)
+        tests_path = directory + "/tests/"
+        examples = TestcaseReturner(tests_path=tests_path)
+        testcases = examples.show_testcases()
+        return testcases
+        
+        
     
     
     def __str__(self):

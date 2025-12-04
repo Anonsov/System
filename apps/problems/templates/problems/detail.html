@@ -41,10 +41,14 @@
                 <h2 class="section-title">Условие задачи</h2>
                 <div class="section-content">{{ problem.statement }}</div>
                 
-                <div class="example-section">
+                {% if problem.note %}
+                    <div class="example-section">
                     <div class="example-title">Пример:</div>
                     <div class="example-content">{{ problem.note }}</div>
-                </div>
+                    </div>
+                {% endif %}
+                    
+                
             </div>
 
             <div class="problem-section">
@@ -114,21 +118,23 @@
                         <div class="error-message">{{ form.code_area.errors }}</div>
                     {% endif %}
                 </div>
-                    
+
             </form>
             
         </div>
 
         <div class="tests-section">
             <h3 class="right-section-title">Тест-кейсы</h3>
-            
-            <div class="test-case">
-                <div class="test-case-title">Тест 1</div>
-                <div><strong>Вход:</strong></div>
-                <div class="test-input">5<br>пока что заглушка</div>
-                <div><strong>Ожидаемый выход:</strong></div>
-                <div class="test-output">пока что заглушка</div>
-            </div>
+            {% for num, io in problem.show_testcases.items %}
+                <div class="test-case">
+                    <div class="test-case-little">Тест {{num}}</div>
+                    <div><strong>Вход:</strong></div>
+                    <div class="test-input">{{io.input|join:""|linebreaksbr}}</div>
+                    
+                    <div><strong>Ожидаемый выход:</strong></div>
+                    <div class="test-output">{{io.output|join:""|linebreaksbr}}</div>
+                </div>
+            {% endfor %}
         </div>
     </div>
 </div>

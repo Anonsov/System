@@ -1,5 +1,5 @@
 from typing import Any
-from django.shortcuts import get_object_or_404
+from django.shortcuts import get_object_or_404, redirect
 from django.views.generic import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormMixin
@@ -78,10 +78,9 @@ class ProblemDetailView(FormMixin, DetailView):
             messages.success(request, f'Решение отправлено под ID: {submission.id}')
             
             
-            #TODO: Process the submission (run and etc things)
-            
-            
-            return self.form_valid(form)
+            #TODO: Process the submission (run and etc things)        
+        
+            return redirect(reverse('submissions:RunSubmission', args=[submission.id]))
         else:
             return self.form_invalid(form)
         

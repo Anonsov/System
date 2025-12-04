@@ -1,25 +1,24 @@
 from django import forms
+from django.db import models
 from django_ace import AceWidget
 
 
 class CodeForm(forms.Form):
-    LANGUAGE_CHOICES = [
-        ('python', 'Python'),
-        ('cpp', 'C++'),
-        ('java', 'Java'),
-        ('javascript', 'JavaScript'),
-     
-    ]
-        
+    class LanguageChoices(models.TextChoices):
+        PYTHON = 'python', 'Python'
+        CPP = 'cpp', 'C++'
+        JAVA = 'java', 'Java'
+        JAVASCRIPT = 'javascript', 'JavaScript'
+
     language = forms.ChoiceField(
-    choices=LANGUAGE_CHOICES,
-    initial='python',
-    widget=forms.Select(attrs={'class': 'language-select'})
+        choices=LanguageChoices.choices,
+        initial=LanguageChoices.PYTHON,
+        widget=forms.Select(attrs={'class': 'language-select'})
     )
     code_area = forms.CharField(
         widget=AceWidget(
             mode='python',
-            theme='twilight',
+            theme='monokai',
             width="100%",
             height="350px",
             showprintmargin=False,
