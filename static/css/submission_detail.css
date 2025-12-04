@@ -1,0 +1,35 @@
+.submission-detail-container {
+    max-width: 700px;
+    margin: 30px auto;
+    background: #f9f9f9;
+    border-radius: 8px;
+    padding: 24px 32px;
+    box-shadow: 0 2px 8px rgba(0,0,0,0.07);
+}
+
+.submission-table {
+    width: 10%;
+    border-collapse: collapse;
+    margin-bottom: 18px;
+}
+
+.submission-table th, .submission-table td {
+    padding: 10px 12px;
+    border-bottom: 1px solid #e0e0e0;
+    text-align: left;
+}
+
+.submission-table th {
+    background: #f0f0f0;
+    font-weight: 600;
+    width: 160px;
+}
+
+.submission-table tr:last-child td {
+    border-bottom: none;
+}
+
+h2, h3 {
+    margin-top: 0;
+    color: #333;
+}

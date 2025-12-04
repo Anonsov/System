@@ -1,33 +1,45 @@
 import time
 import requests
+import sys
+import os
 
-API = "localhost:8000/api/v1"
+sys.path.append('/home/anonsina/All/System')  # Path to your Django project root
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'system.settings')  # Or 'system.settings' if lowercase
+
+import django
+django.setup()
+
+from apps.runner.base import Runner
+from apps.submissions.models import Submission
 
 
-def run_in_docker(code, language):
-    return {
-        "status": "AC",
-        "output": "",
-        "time": 0.01,
-        "memory": 10000
-    }
+API = "http://localhost:8000/api/v1"
 
 def main():
+    runner = Runner(model=Submission)
     while True:
         r = requests.get(f"{API}/submissions/next-pending/")
         if r.status_code == 204:
-            time.sleep(2)
+            time.sleep(4)
             continue
-        
+
+
         task = r.json()
+        if "id" not in task:
+            print("No 'id' in response:", task)
+            time.sleep(3)
+            continue
         sub_id = task["id"]
-        code = task["code"]
-        language = task["language"]
-        
-        result = run_in_docker(code, language)
-        
-        requests.post(
-            f"{API}/submissions/{sub_id}/update/", json=result
-        )
-        
-        time.sleep(0.5)
+
+
+        result = runner.run_all_tests(sub_id)
+        time.sleep(3)
+
+        # Send results back to the API
+        # requests.post(
+        #     f"{API}/submissions/{sub_id}/update/", json={"results": result}
+        # )
+        # time.sleep(0.5)
+
+if __name__ == "__main__":
+    main()
