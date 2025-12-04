@@ -1,5 +1,7 @@
-from base import BaseRunner
+import tempfile
+import os
+import subprocess
 
-class LocalRunner(BaseRunner):
-    def run(self, submission_id, code: str, input_data: str):
-        pass
+
+# class Runner:
+    
