@@ -17,7 +17,7 @@ class Submission(models.Model):
         RUNTIME_ERROR = "RE", "Runtime Error"
         MEMORY_LIMIT = "MLE", "Memory Limit Exceeded"
         COMPILATION_ERROR = "CE", "Compilation Error"
-        SYSTEM_ERROR = "SE", "System Error"
+        SYNTAX_ERROR = "SE", "System Error"
     
     id = models.AutoField(primary_key=True)
 
@@ -28,10 +28,9 @@ class Submission(models.Model):
     status = models.CharField(max_length=100, choices=Status.choices, default=Status.PENDING)
     exec_time_ms = models.FloatField(null=True, blank=True)
     memory_kb = models.FloatField(null=True, blank=True)
-    
+    test_results = models.JSONField(default=list, blank=True)
     score = models.IntegerField(default=0)
     output = models.TextField(null=True, blank=True)
-    
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     

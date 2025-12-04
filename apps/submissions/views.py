@@ -1,7 +1,7 @@
 from typing import Any
 from django.shortcuts import render, get_object_or_404, redirect
 from django.views.generic import TemplateView, View
-from .serializers import SubmissionSerializer
+from .serializers import SubmissionSerializer, UpdateSubmissionSerializer
 from rest_framework.response import Response
 from rest_framework import generics, status
 from .models import Submission
@@ -72,6 +72,6 @@ class NextPendingSubmissionAPIView(generics.RetrieveAPIView):
 
 class UpdateSubmissionAPIView(generics.UpdateAPIView):
     queryset = Submission.objects.all()
-    serializer_class = SubmissionSerializer
+    serializer_class = UpdateSubmissionSerializer 
     lookup_field = "id"
     
