@@ -9,8 +9,9 @@ from django.views.generic.list import ListView
 from apps.problems.models import Problem
 from django.views.generic.edit import FormMixin
 from django.contrib import messages
-from django.views.generic.detail import DetailView
+from django.views.generic.detail import DetailView 
 from .forms import ReadOnlyCodeForm
+from rest_framework.generics import RetrieveUpdateAPIView
 # from runner.base import Runner
 
 
@@ -70,7 +71,7 @@ class NextPendingSubmissionAPIView(generics.RetrieveAPIView):
         return Response(serializer.data)
         
 
-class UpdateSubmissionAPIView(generics.UpdateAPIView):
+class UpdateSubmissionAPIView(generics.RetrieveUpdateAPIView):
     queryset = Submission.objects.all()
     serializer_class = UpdateSubmissionSerializer 
     lookup_field = "id"

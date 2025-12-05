@@ -1,3 +1,7 @@
+# etalon_solution.py
+import sys
+import math
+
 x = float(input().strip())
 
 def sqrt_bin_search(x):
@@ -5,7 +9,7 @@ def sqrt_bin_search(x):
         return 0.0
 
     l, r = 0.0, max(1.0, x)
-    eps = 1e-6
+    eps = 1e-7
 
     while r - l > eps:
         m = (l + r) / 2

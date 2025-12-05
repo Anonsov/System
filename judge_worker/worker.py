@@ -33,12 +33,16 @@ def main():
         sub_id = task["id"]
 
 
-        result = runner.run_all_tests(sub_id)
+        overall_result = runner.run_all_tests(sub_id)
+        result = {
+            "status": overall_result['status'],
+            "test_results": overall_result['test_results'],
+            "score": overall_result['score']
+        }
         time.sleep(3)
 
-        # Send results back to the API
         requests.patch(
-            f"{API}/submissions/{sub_id}/update/", json={"results": result}
+            f"{API}/submissions/{sub_id}/update/", json=result
         )
         time.sleep(3)
 
