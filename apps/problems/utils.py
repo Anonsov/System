@@ -13,13 +13,11 @@ class Runner:
     """
     def __init__(self, solution_path: str,
                  generator_path: str,
-                 tests_path: str,
-                 score: int):
+                 tests_path: str,):
 
         self.solution_path = solution_path
         self.generator_path = generator_path
         self.tests_path = tests_path
-        self.score = score
         
         
     def input_generator(self):

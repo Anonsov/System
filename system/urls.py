@@ -29,7 +29,7 @@ urlpatterns = [
     path("accounts/", include('apps.accounts.urls', namespace='accounts')),
     
     path("api/v1/", include('apps.problems.api_urls')),
-    path("api/v1/", include('apps.submissions.api_urls')),
+    path("api/v1/", include("apps.submissions.api_urls")),
     path('admin/', admin.site.urls),
 ]
 

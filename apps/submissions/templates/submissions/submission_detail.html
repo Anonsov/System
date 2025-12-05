@@ -29,11 +29,28 @@
                 <th>Submitted at</th>
                 <td>{{ submission.created_at }}</td>
             </tr>
+            <tr>
+                <th>Score</th>
+                <td>{{submission.score}}</td>
+            </tr>
         </table>
         <h3>Code:</h3>
         <form>
             {{ form.code_area }}
         </form>
+        <h3>Test Results:</h3>
+        <table class="test-results-table">
+            <tr>
+                <th>Test ID</th>
+                <th>Status</th>
+            </tr>
+            {% for test in submission.test_results|dictsort:"test" %}
+            <tr>
+                <td>{{ test.test }}</td>
+                <td>{{ test.status }}</td>
+            </tr>
+            {% endfor %}
+        </table>
     </div>
     {% endif %}
         

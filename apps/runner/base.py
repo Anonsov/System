@@ -20,6 +20,7 @@ class Runner:
         language = submission.language
         exec_time_ms = submission.exec_time_ms
         time_limit_ms = submission.problem.time_limit_ms
+        memory_limit = submission.problem.memory_limit_mb
         uuid = submission.problem.uuid
         
         testcases_dir = f"apps/problems/testcases/{uuid}"
@@ -41,7 +42,7 @@ class Runner:
         
         for filename in directories:
             if filename.endswith(".in"):
-                test_num = filename.split(".")[0]
+                test_num = int(filename.split(".")[0])
                 
                 input_path = os.path.join(testcases_dir, f"{test_num}.in")
                 output_path = os.path.join(testcases_dir, f"{test_num}.out")
@@ -60,8 +61,14 @@ class Runner:
                 try:
                     start_time = time.perf_counter()
                     print("захожу в субпроцесс")
+                    docker_cmd = [
+                        "docker", 'run', "--rm",
+                        "--network=none",
+                        f"--memory={memory_limit}m",
+                        "-v", f"{temp_file_path}"
+                    ]
                     proc = subprocess.run(
-                        ["python3", temp_file_path],
+                        docker_cmd,
                         input=input_data,
                         capture_output=True,
                         text=True,

@@ -17,7 +17,7 @@ class Submission(models.Model):
         RUNTIME_ERROR = "RE", "Runtime Error"
         MEMORY_LIMIT = "MLE", "Memory Limit Exceeded"
         COMPILATION_ERROR = "CE", "Compilation Error"
-        SYNTAX_ERROR = "SE", "System Error"
+        SYNTAX_ERROR = "SE", "Syntax Error"
     
     id = models.AutoField(primary_key=True)
 

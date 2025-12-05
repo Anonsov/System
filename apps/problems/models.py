@@ -55,7 +55,7 @@ class Problem(models.Model):
     etalon_solution = models.FileField(default=None, null=True)
     generator_test = models.FileField(default=None, null=True)
     checker = models.FileField(default=None, null=True)
-    score = models.IntegerField(default=20)
+    score = models.IntegerField(default=0)
     note = models.TextField(default="", null=True)
     
     
@@ -117,13 +117,13 @@ class Problem(models.Model):
             solution_path=solution_path,
             generator_path=generator_path,
             tests_path=tests_path,
-            score=self.score
         )
 
         ### running the main generator        
         runner.main_generator()
         ### running the main generator
         
+        self.score = len(os.listdir(tests_path)) // 2
 
         super().save(*args, **kwargs)
 

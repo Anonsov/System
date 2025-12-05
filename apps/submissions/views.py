@@ -26,7 +26,7 @@ class SubmissionsMainPageView(ListView):
     ordering = ["-created_at"]
     
     def get_queryset(self):
-        return Submission.objects.filter(user=self.request.user).order_by("-created_at")
+        return Submission.objects.all()
 
 
 class SubmissionDetailView(DetailView):
@@ -41,11 +41,8 @@ class SubmissionDetailView(DetailView):
         form = ReadOnlyCodeForm(initial={'code_area': submission.code}) # type: ignore
         context['form'] = form
         return context
-        
+    
 
-    
-    
-    
 class NextPendingSubmissionAPIView(generics.RetrieveAPIView):
     serializer_class = SubmissionSerializer
     
@@ -75,4 +72,3 @@ class UpdateSubmissionAPIView(generics.RetrieveUpdateAPIView):
     queryset = Submission.objects.all()
     serializer_class = UpdateSubmissionSerializer 
     lookup_field = "id"
-    
