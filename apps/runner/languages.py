@@ -15,7 +15,7 @@ LANGUAGES = {
     "csharp": {
         "extension": ".cs",
         "docker_image": "runner-csharp",
-        "compile": ["mcs", "/code.cs", "-out:/code.exe"],
-        "run": ["mono", "/code.exe"]
+        "compile": ["mcs", "-out:Program.exe", "Program.cs"],
+        "run": ["mono", "Program.exe"]
     }
 }

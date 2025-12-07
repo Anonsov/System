@@ -8,7 +8,7 @@ class CodeForm(forms.Form):
         PYTHON = 'python', 'Python'
         CPP = 'cpp', 'C++'
         JAVA = 'java', 'Java'
-        JAVASCRIPT = 'javascript', 'JavaScript'
+        JAVASCRIPT = 'csharp', 'C#'
 
     language = forms.ChoiceField(
         choices=LanguageChoices.choices,

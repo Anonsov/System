@@ -1,3 +1,3 @@
-FROM mono:6.12-slim
+FROM mono:latest
 WORKDIR /app
 CMD ["bash"]
