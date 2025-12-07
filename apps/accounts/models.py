@@ -7,4 +7,3 @@ class Profile(models.Model):
     score = models.IntegerField(default=0)  
     solved_count = models.IntegerField(default=0)
     
-    
