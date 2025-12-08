@@ -1,22 +1,24 @@
+<!-- filepath: /home/anonsina/All/System/apps/submissions/templates/submissions/submissions.html -->
 {% extends "base.html" %}
 
 {% load static %}
 
 {% block submissions %}
-<link rel="stylesheet" href="{% static 'css/problems.css' %}"> 
-<div class="problems-container">
-    <div class="problems-header">
-        <h1>Посылки</h1>
+<link rel="stylesheet" href="{% static 'css/submissions.css' %}"> 
+<div class="submissions-container">
+    <div class="submissions-header">
+        <h1>🎃 Посылки 🎃</h1>
     </div>
 
     {% if submissions %}
-        <table class="problems-table">
+        <table class="submissions-table">
             <thead>
                 <tr>
-                    <th>Problem name</th>
+                    <th>Problem</th>
                     <th>Language</th>
                     <th>Status</th>
-                    <th>Submitted at</th>
+                    <th>Score</th>
+                    <th>Submitted</th>
                     <th>User</th>
                     <th>Details</th>
                 </tr>
@@ -30,27 +32,29 @@
                         </a>
                     </td>
                     <td>
-                        <span class="difficulty-badge difficulty-{{ problem.difficulty }}">
+                        <span class="language-badge">
                             {{ submission.language }}
                         </span>
                     </td>
                     <td>
-                        <span class="difficulty-badge difficulty-{{ problem.difficulty }}">
+                        <span class="status-badge status-{{ submission.status }}">
                             {{ submission.status }}
                         </span>
                     </td>
-                    
+                    <td>
+                        <strong style="color: #ffa500;">{{ submission.score }}</strong>
+                    </td>
                     <td class="created-date">
-                        {{ submission.created_at|date:"M d, Y" }}
+                        {{ submission.created_at|date:"M d, Y H:i" }}
                     </td>
                     <td>
-                        <span class="difficulty-badge difficulty-{{ problem.difficulty }}">
+                        <span class="user-badge">
                             {{ submission.user.username }}
                         </span>
                     </td>
                     <td>
-                        <a href="{% url 'submissions:RunSubmission' submission.id %}" class="problem-title">
-                            More Info
+                        <a href="{% url 'submissions:RunSubmission' submission.id %}" class="details-link">
+                            View
                         </a>
                     </td>
                 </tr>
@@ -58,10 +62,10 @@
             </tbody>
         </table>
     {% else %}
-        <div class="no-problems">
-            <h3>No submissions yet</h3>
+        <div class="no-submissions">
+            <h3>👻 No submissions yet</h3>
+            <p>Start solving problems to see your submissions here!</p>
         </div>
     {% endif %}
 </div>
 {% endblock submissions %}
-    

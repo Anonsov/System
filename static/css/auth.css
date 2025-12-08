@@ -2,69 +2,226 @@
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 70vh;
-    background: #f7f8fa;
+    min-height: 80vh;
+    padding: 40px 20px;
 }
 
 .auth-card {
-    background: #fff;
-    border-radius: 10px;
-    box-shadow: 0 2px 12px rgba(0,0,0,0.07);
-    padding: 32px 40px;
-    min-width: 340px;
-    max-width: 400px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 15px;
+    padding: 40px;
+    max-width: 450px;
+    width: 100%;
+    border: 2px solid #ff6b00;
+    box-shadow: 0 10px 40px rgba(255, 107, 0, 0.3);
+    animation: fadeIn 0.5s ease;
 }
 
 .auth-card h2 {
-    margin-top: 0;
-    margin-bottom: 24px;
-    color: #333;
-    font-size: 1.7rem;
-    font-weight: 700;
+    color: #ff6b00;
+    font-size: 2.5em;
     text-align: center;
+    margin-bottom: 30px;
+    text-shadow: 0 0 20px rgba(255, 107, 0, 0.5);
+    font-family: 'Creepster', cursive;
+    animation: flicker 3s infinite;
+}
+
+/* Form styles */
+form {
+    display: flex;
+    flex-direction: column;
+    gap: 20px;
 }
 
 .form-group {
-    margin-bottom: 18px;
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
 }
 
-.form-label, label {
-    display: block;
-    margin-bottom: 6px;
-    color: #555;
-    font-weight: 500;
+.form-group label {
+    color: #ffa500;
+    font-weight: bold;
+    font-size: 1.05em;
 }
 
-.form-input, input[type="text"], input[type="password"] {
-    width: 100%;
-    padding: 8px 12px;
-    border: 1px solid #e0e0e0;
-    border-radius: 6px;
-    font-size: 1rem;
-    background: #fafafa;
-    box-sizing: border-box;
+.form-group input[type="text"],
+.form-group input[type="password"],
+.form-group input[type="email"] {
+    padding: 12px 15px;
+    background: rgba(22, 33, 62, 0.9);
+    border: 2px solid #ff6b00;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 1em;
+    transition: all 0.3s ease;
 }
 
-.form-error {
-    color: #d32f2f;
-    font-size: 0.95rem;
-    margin-top: 4px;
+.form-group input:focus {
+    outline: none;
+    border-color: #ff8c00;
+    box-shadow: 0 0 15px rgba(255, 107, 0, 0.4);
+    background: rgba(22, 33, 62, 1);
 }
 
-.auth-btn, button[type="submit"] {
-    width: 100%;
-    padding: 10px 0;
-    background: #1976d2;
-    color: #fff;
-    border: none;
-    border-radius: 6px;
-    font-size: 1.1rem;
-    font-weight: 600;
+.form-group input::placeholder {
+    color: #666;
+}
+
+/* File input styling - ADD THIS! */
+.form-group input[type="file"] {
+    padding: 10px;
+    background: rgba(22, 33, 62, 0.9);
+    border: 2px dashed #ff6b00;
+    border-radius: 8px;
+    color: #e0e0e0;
+    font-size: 0.95em;
     cursor: pointer;
-    margin-top: 12px;
-    transition: background 0.2s;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="file"]:hover {
+    background: rgba(22, 33, 62, 1);
+    border-color: #ff8c00;
+}
+
+.form-group input[type="file"]::-webkit-file-upload-button {
+    background: linear-gradient(135deg, #ff6b00, #ff8c00);
+    color: #1a1a2e;
+    border: none;
+    padding: 8px 15px;
+    border-radius: 5px;
+    font-weight: bold;
+    cursor: pointer;
+    margin-right: 10px;
+    transition: all 0.3s ease;
+}
+
+.form-group input[type="file"]::-webkit-file-upload-button:hover {
+    background: linear-gradient(135deg, #ff8c00, #ffaa00);
+    transform: translateY(-1px);
+}
+
+/* Error messages */
+.form-error {
+    color: #ff4444;
+    font-size: 0.9em;
+    margin-top: 5px;
+    padding: 8px;
+    background: rgba(255, 68, 68, 0.1);
+    border-radius: 5px;
+    border-left: 3px solid #ff4444;
+    display: none;
+}
+
+.form-error:not(:empty) {
+    display: block;
+}
+
+/* Submit button */
+.auth-btn {
+    padding: 14px 20px;
+    background: linear-gradient(135deg, #ff6b00, #ff8c00);
+    color: #1a1a2e;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 5px 15px rgba(255, 107, 0, 0.3);
+    margin-top: 10px;
 }
 
 .auth-btn:hover {
-    background: #1565c0;
+    background: linear-gradient(135deg, #ff8c00, #ffaa00);
+    transform: translateY(-2px);
+    box-shadow: 0 7px 20px rgba(255, 107, 0, 0.5);
+}
+
+.auth-btn:active {
+    transform: translateY(0);
+}
+
+/* Additional links */
+.auth-links {
+    text-align: center;
+    margin-top: 20px;
+}
+
+.auth-links a {
+    color: #ffa500;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.auth-links a:hover {
+    color: #ff6b00;
+    text-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
+}
+
+/* Animations */
+@keyframes fadeIn {
+    from {
+        opacity: 0;
+        transform: translateY(-20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}
+
+/* Responsive design */
+@media (max-width: 600px) {
+    .auth-card {
+        padding: 30px 20px;
+    }
+    
+    .auth-card h2 {
+        font-size: 2em;
+    }
+    
+    .form-group input {
+        font-size: 16px; /* Prevent zoom on iOS */
+    }
+}
+
+/* Loading state */
+.auth-btn:disabled {
+    background: #666;
+    cursor: not-allowed;
+    opacity: 0.6;
+}
+
+/* Success message */
+.form-success {
+    color: #00ff00;
+    background: rgba(0, 255, 0, 0.1);
+    border-left: 3px solid #00ff00;
+    padding: 12px;
+    border-radius: 5px;
+    margin-bottom: 15px;
+    text-align: center;
+}
+
+/* Checkbox styling (for "Remember me" etc) */
+.form-group input[type="checkbox"] {
+    width: 18px;
+    height: 18px;
+    accent-color: #ff6b00;
+}
+
+.checkbox-label {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #e0e0e0;
+    cursor: pointer;
 }

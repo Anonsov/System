@@ -20,6 +20,8 @@ from django.conf import settings
 from django.conf.urls.static import static
 from apps.problems.views import ProblemsAPIView
 
+
+
 urlpatterns = [
     path("", include('apps.home.urls')),
     path("archive/", include('apps.archive.urls', namespace="archive")),
@@ -36,3 +38,4 @@ urlpatterns = [
 
 if settings.DEBUG:
     urlpatterns += static(settings.STATIC_URL, document_root=settings.STATICFILES_DIRS[0])
+    urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

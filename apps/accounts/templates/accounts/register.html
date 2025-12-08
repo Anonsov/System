@@ -1,3 +1,4 @@
+<!-- filepath: /home/anonsina/All/System/apps/accounts/templates/accounts/register.html -->
 {% extends "base.html" %}
 {% load static %}
 
@@ -5,11 +6,13 @@
 <link rel="stylesheet" href="{% static 'css/auth.css' %}">
 <div class="auth-container">
     <div class="auth-card">
-        <h2>Регистрация</h2>
-        <form method="post" action="">
+        <h2>🎃 Регистрация 🎃</h2>
+        <form method="post" action="" enctype="multipart/form-data">
             {% csrf_token %}
             <input type="hidden" name="next" value="{{ next }}" />
+            
             <div class="form-error">{{ form.non_field_errors }}</div>
+            
             {% for f in form %}
                 <div class="form-group">
                     <label for="{{ f.id_for_label }}">{{ f.label }}</label>
@@ -17,9 +20,13 @@
                     <div class="form-error">{{ f.errors }}</div>
                 </div>
             {% endfor %}
-            <button type="submit" class="auth-btn">Зарегистрироваться</button>
             
+            <button type="submit" class="auth-btn">Зарегистрироваться</button>
         </form>
+        
+        <div class="auth-links">
+            <p>Уже есть аккаунт? <a href="{% url 'accounts:login' %}">Войти</a></p>
+        </div>
     </div>
 </div>
 {% endblock register %}

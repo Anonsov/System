@@ -1,3 +1,4 @@
+<!-- filepath: /home/anonsina/All/System/apps/problems/templates/problems/problems.html -->
 {% extends "base.html" %}
 {% load static %}
 
@@ -5,7 +6,7 @@
 <link rel="stylesheet" href="{% static 'css/problems.css' %}">
 <div class="problems-container">
     <div class="problems-header">
-        <h1>Задачки</h1>
+        <h1>🎃 Задачки 🎃</h1>
     </div>
 
     {% if problems %}
@@ -22,6 +23,11 @@
                 <tr>
                     <td>
                         <a href="{{ problem.get_absolute_url }}" class="problem-title">
+                            {% comment %}
+                            {% if problem.is_solved_by_user %}
+                                <span class="problem-solved">✅</span>
+                            {% endif %}
+                            {% endcomment %}
                             {{ problem.title }}
                         </a>
                     </td>
@@ -39,9 +45,9 @@
         </table>
     {% else %}
         <div class="no-problems">
-            <h3>No problems yet</h3>
-            <p>Check back later for new challenges!</p>
+            <h3>👻 No problems yet</h3>
+            <p>Check back later for new spooky challenges!</p>
         </div>
     {% endif %}
 </div>
-{% endblock problems %} 
+{% endblock problems %}

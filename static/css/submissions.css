@@ -1,4 +1,4 @@
-.problems-container {
+.submissions-container {
     max-width: 1400px;
     margin: 40px auto;
     padding: 30px;
@@ -8,12 +8,12 @@
     border: 2px solid #ff6b00;
 }
 
-.problems-header {
+.submissions-header {
     text-align: center;
     margin-bottom: 40px;
 }
 
-.problems-header h1 {
+.submissions-header h1 {
     color: #ff6b00;
     font-size: 3em;
     text-shadow: 0 0 20px rgba(255, 107, 0, 0.5);
@@ -21,8 +21,8 @@
     animation: flicker 3s infinite;
 }
 
-/* Problems table */
-.problems-table {
+/* Submissions table */
+.submissions-table {
     width: 100%;
     border-collapse: collapse;
     background: rgba(26, 26, 46, 0.8);
@@ -31,11 +31,11 @@
     box-shadow: 0 5px 20px rgba(0, 0, 0, 0.3);
 }
 
-.problems-table thead {
+.submissions-table thead {
     background: linear-gradient(135deg, #ff6b00, #ff8c00);
 }
 
-.problems-table th {
+.submissions-table th {
     color: #1a1a2e;
     padding: 18px 15px;
     text-align: left;
@@ -45,19 +45,19 @@
     letter-spacing: 1px;
 }
 
-.problems-table tbody tr {
+.submissions-table tbody tr {
     background: rgba(22, 33, 62, 0.9);
     border-bottom: 1px solid rgba(255, 107, 0, 0.2);
     transition: all 0.3s ease;
 }
 
-.problems-table tbody tr:hover {
+.submissions-table tbody tr:hover {
     background: rgba(255, 107, 0, 0.15);
     transform: translateX(5px);
     box-shadow: 0 3px 15px rgba(255, 107, 0, 0.3);
 }
 
-.problems-table td {
+.submissions-table td {
     color: #e0e0e0;
     padding: 15px;
     font-size: 1.05em;
@@ -68,45 +68,86 @@
     color: #ffa500;
     text-decoration: none;
     font-weight: bold;
-    font-size: 1.1em;
     transition: all 0.3s ease;
-    display: inline-block;
 }
 
 .problem-title:hover {
     color: #ff6b00;
     text-shadow: 0 0 10px rgba(255, 107, 0, 0.5);
-    transform: translateX(5px);
 }
 
-/* Difficulty badges */
-.difficulty-badge {
+/* Status badges */
+.status-badge {
     display: inline-block;
-    padding: 6px 14px;
+    padding: 6px 12px;
     border-radius: 20px;
     font-weight: bold;
     font-size: 0.9em;
     text-transform: uppercase;
     letter-spacing: 1px;
-    box-shadow: 0 0 10px rgba(0, 0, 0, 0.3);
 }
 
-.difficulty-easy {
+.status-AC {
     background: linear-gradient(135deg, #00ff00, #00cc00);
     color: #1a1a2e;
     box-shadow: 0 0 15px rgba(0, 255, 0, 0.4);
 }
 
-.difficulty-medium {
+.status-WA {
+    background: linear-gradient(135deg, #ff4444, #cc0000);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(255, 68, 68, 0.4);
+}
+
+.status-TLE {
     background: linear-gradient(135deg, #ffaa00, #ff8800);
     color: #1a1a2e;
     box-shadow: 0 0 15px rgba(255, 170, 0, 0.4);
 }
 
-.difficulty-hard {
-    background: linear-gradient(135deg, #ff4444, #cc0000);
+.status-CE {
+    background: linear-gradient(135deg, #ff00ff, #cc00cc);
     color: #fff;
-    box-shadow: 0 0 15px rgba(255, 68, 68, 0.4);
+    box-shadow: 0 0 15px rgba(255, 0, 255, 0.4);
+}
+
+.status-PENDING {
+    background: linear-gradient(135deg, #888888, #666666);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(136, 136, 136, 0.4);
+}
+
+.status-RUNNING {
+    background: linear-gradient(135deg, #00aaff, #0088cc);
+    color: #fff;
+    box-shadow: 0 0 15px rgba(0, 170, 255, 0.4);
+    animation: pulse 1.5s infinite;
+}
+
+/* Language badges */
+.language-badge {
+    display: inline-block;
+    padding: 5px 10px;
+    border-radius: 15px;
+    font-size: 0.85em;
+    font-weight: bold;
+    text-transform: uppercase;
+    background: rgba(255, 107, 0, 0.2);
+    color: #ffa500;
+    border: 1px solid #ff6b00;
+}
+
+/* User badge */
+.user-badge {
+    color: #00aaff;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+}
+
+.user-badge:hover {
+    color: #00ccff;
+    text-shadow: 0 0 10px rgba(0, 170, 255, 0.5);
 }
 
 /* Created date */
@@ -115,8 +156,27 @@
     font-size: 0.95em;
 }
 
-/* No problems message */
-.no-problems {
+/* Details button/link */
+.details-link {
+    display: inline-block;
+    padding: 8px 16px;
+    background: linear-gradient(135deg, #ff6b00, #ff8c00);
+    color: #1a1a2e;
+    text-decoration: none;
+    border-radius: 20px;
+    font-weight: bold;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(255, 107, 0, 0.3);
+}
+
+.details-link:hover {
+    background: linear-gradient(135deg, #ff8c00, #ffaa00);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 0, 0.5);
+}
+
+/* No submissions message */
+.no-submissions {
     text-align: center;
     padding: 60px 20px;
     background: rgba(22, 33, 62, 0.6);
@@ -124,13 +184,13 @@
     border: 2px dashed #ff6b00;
 }
 
-.no-problems h3 {
+.no-submissions h3 {
     color: #ffa500;
     font-size: 1.8em;
     margin-bottom: 15px;
 }
 
-.no-problems p {
+.no-submissions p {
     color: #999;
     font-size: 1.1em;
 }
@@ -141,60 +201,47 @@
     50% { opacity: 0.8; }
 }
 
+@keyframes pulse {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.6; }
+}
+
 /* Responsive design */
 @media (max-width: 968px) {
-    .problems-container {
+    .submissions-container {
         padding: 20px;
         margin: 20px;
     }
     
-    .problems-header h1 {
+    .submissions-header h1 {
         font-size: 2em;
     }
     
-    .problems-table {
+    .submissions-table {
         font-size: 0.9em;
     }
     
-    .problems-table th,
-    .problems-table td {
+    .submissions-table th,
+    .submissions-table td {
         padding: 10px 8px;
-    }
-    
-    .problem-title {
-        font-size: 1em;
-    }
-}
-
-@media (max-width: 600px) {
-    .problems-table th:nth-child(3),
-    .problems-table td:nth-child(3) {
-        display: none; /* Hide created date on small screens */
     }
 }
 
 /* Scrollbar styling */
-.problems-container::-webkit-scrollbar {
+.submissions-container::-webkit-scrollbar {
     width: 10px;
 }
 
-.problems-container::-webkit-scrollbar-track {
+.submissions-container::-webkit-scrollbar-track {
     background: rgba(26, 26, 46, 0.8);
     border-radius: 5px;
 }
 
-.problems-container::-webkit-scrollbar-thumb {
+.submissions-container::-webkit-scrollbar-thumb {
     background: #ff6b00;
     border-radius: 5px;
 }
 
-.problems-container::-webkit-scrollbar-thumb:hover {
+.submissions-container::-webkit-scrollbar-thumb:hover {
     background: #ff8c00;
-}
-
-/* Optional: Add solved indicator icon */
-.problem-solved {
-    color: #00ff00;
-    margin-right: 8px;
-    font-size: 1.2em;
 }

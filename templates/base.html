@@ -1,29 +1,38 @@
-
+<!-- filepath: /home/anonsina/All/System/templates/base.html -->
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Nightmare</title>
+    <title>Nightmare 🎃</title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'css/profile.css' %}">
-    <link rel="stylesheet" href="{% static 'css/home.css' %}">
+    <link rel="stylesheet" href="{% static 'css/base.css' %}">
 </head>
 <body>
     <nav class="navbar">
         <!-- Left: Logo -->
         <div class="navbar-left">
-            <img src="{% static 'images/logo.png' %}" alt="Nightmare Logo" class="navbar-logo">
+            {% comment %} <a href="{% url 'home:HomeMainPage' %}"> {% endcomment %}
+                <img src="{% static 'images/logo.png' %}" alt="Nightmare Logo" class="navbar-logo">
+            {% comment %} </a> {% endcomment %}
         </div>
         
-        <!-- Center: Navigation Links (dummy) -->
-        <ul class="navbar-center">
+        <!-- Mobile menu toggle -->
+        <div class="mobile-menu-toggle" onclick="toggleMobileMenu()">
+            <span></span>
+            <span></span>
+            <span></span>
+        </div>
+        
+        <!-- Center: Navigation Links -->
+        <ul class="navbar-center" id="navbarCenter">
             <li><a href="{% url 'archive:ArchiveMainPage' %}">ARCHIVE</a></li>
-            <li><a href="{% url 'contests:ContestsMainPage'%}">CONTESTS</a></li>
-            <li><a href="{% url 'submissions:SubmissionsMainPage'%}">SUBMISSIONS</a></li>
-            <li><a href="{% url 'problems:ProblemsMainPage'%}">PROBLEMS</a></li>
+            <li><a href="{% url 'contests:ContestsMainPage' %}">CONTESTS</a></li>
+            <li><a href="{% url 'submissions:SubmissionsMainPage' %}">SUBMISSIONS</a></li>
+            <li><a href="{% url 'problems:ProblemsMainPage' %}">PROBLEMS</a></li>
         </ul>
         
+        <!-- Right: User section -->
         <div class="navbar-right">
             {% if user.is_authenticated %}
                 <div class="user-dropdown">
@@ -31,11 +40,9 @@
                     <div class="dropdown-content">
                         <a href="{% url 'accounts:profile' %}">Профиль</a>
                         <a href="#settings">Настройки</a>
-                        <form method="post" action="{% url 'accounts:logout' %}" style="display: inline;">
+                        <form method="post" action="{% url 'accounts:logout' %}">
                             {% csrf_token %}
-                            <button type="submit" style="background: none; border: none; color: white; cursor: pointer; padding: 12px 16px; width: 100%; text-align: left;">
-                                Выйти
-                            </button>
+                            <button type="submit">Выйти</button>
                         </form>
                     </div>
                 </div>
@@ -46,60 +53,31 @@
         </div>
     </nav>
     
-    <!-- Rest of your content goes here -->
+    <!-- Content wrapper -->
+    <div class="content-wrapper">
+        {% block home %}{% endblock home %}
+        {% block archive %}{% endblock archive %}
+        {% block contests %}{% endblock contests %}
+        {% block problems %}{% endblock problems %}
+        {% block submissions %}{% endblock submissions %}
+        {% block login %}{% endblock login %}
+        {% block register %}{% endblock register %}
+        {% block detail %}{% endblock detail %}
+        {% block submission_detail %}{% endblock submission_detail %}
+        {% block profile %}{% endblock profile %}
+    </div>
     
-    {% block home %}
-    {% endblock home %}
+    <!-- Optional footer -->
+    <footer class="footer">
+        <p>🎃 Nightmare Online Judge 🎃</p>
+        <p>&copy; 2025 All rights reserved | <a href="#">Privacy Policy</a> | <a href="#">Terms of Service</a></p>
+    </footer>
     
-    
-    {% block archive %}
-
-    {% endblock archive %}
-
-        
-    
-    {% block contests %}
-        
-    {% endblock contests %}
-
-    
-    {% block problems %}
-        
-    {% endblock problems %}
-
-    
-    {% block submissions %}
-        
-    {% endblock submissions %}
-    
-
-    {% block login %}
-    
-    {% endblock login %}
-    
-    
-    {% block register %}
-        
-    {% endblock register %}
-        
-    
-    {% block detail %}
-        
-    {% endblock detail %}
-        
-
-    
-    {% block submission_detail %}
-        
-    {% endblock submission_detail %}
-
-    
-    {% block profile %}
-        
-    {% endblock profile %}
-        
-        
+    <script>
+        function toggleMobileMenu() {
+            const navbarCenter = document.getElementById('navbarCenter');
+            navbarCenter.classList.toggle('active');
+        }
+    </script>
 </body>
 </html>
-
-

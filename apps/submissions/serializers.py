@@ -6,6 +6,7 @@ class SubmissionSerializer(serializers.ModelSerializer):
         model = Submission
         fields = "__all__"
 
+
 class UpdateSubmissionSerializer(serializers.ModelSerializer):
     class Meta:
         model = Submission

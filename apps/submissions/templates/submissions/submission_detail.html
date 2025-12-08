@@ -1,58 +1,79 @@
+<!-- filepath: /home/anonsina/All/System/apps/submissions/templates/submissions/submission_detail.html -->
 {% extends "base.html" %}
 {% load static %}
 
-{% comment %} <link rel="stylesheet" href="{% static 'css/detail.css' %}"> {% endcomment %}
 {% block submission_detail %}
     <link rel="stylesheet" href="{% static 'css/submission_detail.css' %}">
     {{ form.media }}
     {% if submission %}
     <div class="submission-detail-container">
-        <h2>Submission #{{ submission.id }}</h2>
-        <table class="submission-table">
-            <tr>
-                <th>User</th>
-                <td>{{ submission.user.username }}</td>
-            </tr>
-            <tr>
-                <th>Problem</th>
-                <td>{{ submission.problem.title }}</td>
-            </tr>
-            <tr>
-                <th>Status</th>
-                <td>{{ submission.status }}</td>
-            </tr>
-            <tr>
-                <th>Language</th>
-                <td>{{ submission.language }}</td>
-            </tr>
-            <tr>
-                <th>Submitted at</th>
-                <td>{{ submission.created_at }}</td>
-            </tr>
-            <tr>
-                <th>Score</th>
-                <td>{{submission.score}}</td>
-            </tr>
-        </table>
-        <h3>Code:</h3>
-        <form>
-            {{ form.code_area }}
-        </form>
-        <h3>Test Results:</h3>
-        <table class="test-results-table">
-            <tr>
-                <th>Test ID</th>
-                <th>Status</th>
-            </tr>
-            {% for test in submission.test_results|dictsort:"test" %}
-            <tr>
-                <td>{{ test.test }}</td>
-                <td>{{ test.status }}</td>
-            </tr>
-            {% endfor %}
-        </table>
+        <h2>🎃 Submission #{{ submission.id }} 🎃</h2>
+        
+        <div class="submission-info-wrapper">
+            <div class="left-section">
+                <h3>📝 Submission Info</h3>
+                <table class="submission-table">
+                    <tr>
+                        <th>User</th>
+                        <td>{{ submission.user.username }}</td>
+                    </tr>
+                    <tr>
+                        <th>Problem</th>
+                        <td>{{ submission.problem.title }}</td>
+                    </tr>
+                    <tr>
+                        <th>Status</th>
+                        <td>{{ submission.status }}</td>
+                    </tr>
+                    <tr>
+                        <th>Language</th>
+                        <td>{{ submission.language }}</td>
+                    </tr>
+                    <tr>
+                        <th>Submitted at</th>
+                        <td>{{ submission.created_at }}</td>
+                    </tr>
+                    <tr>
+                        <th>Score</th>
+                        <td>{{ submission.score }}</td>
+                    </tr>
+                </table>
+            </div>
+            
+            
+            <div class="right-section">
+                <h3>🧪 Test Results</h3>
+                <div class="test-results-table-wrapper">
+                    <table class="test-results-table">
+                        <thead>
+                            <tr>
+                                <th>Test ID</th>
+                                <th>Status</th>
+                                <th>Time (s)</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for test in submission.test_results|dictsort:"test" %}
+                            <tr>
+                                <td>{{ test.test }}</td>
+                                <td>{{ test.status }}</td>
+                                <td>{{ test.time|floatformat:3 }}</td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+        
+        
+        <div class="code-section">
+            <h3>💻 Code</h3>
+            <form>
+                {{ form.code_area }}
+            </form>
+        </div>
     </div>
     {% endif %}
         
 {% endblock submission_detail %}
-    

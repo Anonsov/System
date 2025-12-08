@@ -1,15 +1,29 @@
+<!-- filepath: /home/anonsina/All/System/apps/accounts/templates/accounts/profile.html -->
 {% extends "base.html" %}
 {% load static %}
 
 {% block profile %}
 <link rel="stylesheet" href="{% static 'css/profile.css' %}">
+<link rel="stylesheet" href="{% static 'css/auth.css' %}">
 <div class="profile-container">
     <div class="profile-card">
+        <!-- Left: Avatar -->
         <div class="profile-avatar">
-            <img src="{% static 'img/default_avatar.png' %}" alt="Avatar">
+            {% if user.profile.avatar %}
+                <img src="{{ user.profile.avatar.url }}" alt="{{ user.username }}'s avatar">
+            {% else %}
+                <img src="{% static 'img/default_avatar.png' %}" alt="Default avatar">
+            {% endif %}
+            <form method="post" enctype="multipart/form-data" style="margin-top: 15px;">
+                {% csrf_token %}
+                {{ form.avatar }}
+                <button type="submit" class="auth-btn">Изменить аватар</button>
+            </form>
         </div>
+        
+        <!-- Right: Profile info -->
         <div class="profile-info">
-            <h2>{{ user.username }}</h2>
+            <h2>🎃 {{ user.username }} 🎃</h2>
             <table class="profile-table">
                 <tr>
                     <th>Email:</th>
@@ -17,17 +31,20 @@
                 </tr>
                 <tr>
                     <th>Score:</th>
-                    <td>{{ user.profile.score }}</td>
+                    <td><strong style="color: #ff6b00; font-size: 1.2em;">{{ user.profile.score }}</strong></td>
+                </tr>
+                <tr>
+                    <th>Solved:</th>
+                    <td><strong style="color: #00ff00; font-size: 1.2em;">{{ user.profile.solved_count }}</strong></td>
                 </tr>
                 <tr>
                     <th>Date joined:</th>
-                    <td>{{ user.date_joined|date:"Y-m-d H:i" }}</td>
+                    <td>{{ user.date_joined|date:"M d, Y H:i" }}</td>
                 </tr>
                 <tr>
                     <th>Last login:</th>
-                    <td>{{ user.last_login|date:"Y-m-d H:i" }}</td>
+                    <td>{{ user.last_login|date:"M d, Y H:i" }}</td>
                 </tr>
-                <!-- Add more profile fields here if needed -->
             </table>
         </div>
     </div>

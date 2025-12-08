@@ -21,14 +21,14 @@ def main():
         
         r = requests.get(f"{API}/submissions/next-pending/")
         if r.status_code == 204:
-            time.sleep(4)
+            time.sleep(2)
             continue
 
 
         task = r.json()
         if "id" not in task:
             print("No 'id' in response:", task)
-            time.sleep(3)
+            time.sleep(2)
             continue
         sub_id = task["id"]
 
@@ -39,12 +39,11 @@ def main():
             "test_results": overall_result['test_results'],
             "score": overall_result['score']
         }
-        time.sleep(3)
 
         requests.patch(
             f"{API}/submissions/{sub_id}/update/", json=result
         )
-        time.sleep(3)
+        time.sleep(0.5)
 
 if __name__ == "__main__":
     main()

@@ -168,7 +168,9 @@ class Runner:
         self.model = model
         self.base_dir = settings.BASE_DIR  
 
-
+         
+        
+    
     def run_all_tests(self, submission_id):
         submission = self.model.objects.get(id=submission_id)
         submission.status = self.model.Status.RUNNING
@@ -245,13 +247,42 @@ class Runner:
         else:
             overall_status = "AC"
 
+        submission.score = solved_count
+        submission.status = overall_status
+        submission.save()
+        
+        self._update_user_score(submission)
+    
+        
         return {
             "status": overall_status,
             "exec_time_ms": max_elapsed_time,
             "test_results": test_results,
             "score": solved_count
         }
-
+        
+        
+    def _update_user_score(self, submission):
+        user = submission.user
+        problem = submission.problem
+        new_score = submission.score
+        max_score_sub = self.model.objects.filter(
+            user=user,
+            problem=problem
+        ).exclude(id=submission.id).order_by('-score').first()
+        
+        profile = user.profile
+        
+        if not max_score_sub:
+            profile.score += new_score
+        else:
+            max_score = max_score_sub.score
+            if new_score > max_score:
+                profile.score += (new_score - max_score)
+        
+        profile.save()     
+                
+       
     def _run_single_test(self, language_runner, code, input_data, expected_output,
                          time_limit_ms, memory_limit, test_num, checker_path):
         """for single tests (i use it above - in run_all_tests methof)"""
