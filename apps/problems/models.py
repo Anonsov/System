@@ -4,13 +4,12 @@ from django.contrib.auth import get_user_model
 from django.contrib.auth.models import User
 from .forms import CodeForm
 
-
 from django.urls import reverse
 import shutil
 import os
 from .utils import Runner, TestcaseReturner
 import uuid
-
+from system import settings
 
 class Tag(models.Model):
     name = models.CharField(max_length=30, unique=True)
@@ -24,6 +23,10 @@ class Tag(models.Model):
 
     def __str__(self):
         return self.name
+
+
+def upload_to(instance, filename):
+    return f"problems/{instance.uuid}/{filename}"
 
 
 class Problem(models.Model):
@@ -52,97 +55,49 @@ class Problem(models.Model):
     tags = models.ManyToManyField(Tag, blank=True)
 
     created_at = models.DateTimeField(auto_now_add=True)
-    etalon_solution = models.FileField(default=None, null=True)
-    generator_test = models.FileField(default=None, null=True)
-    checker = models.FileField(default=None, null=True)
-    score = models.IntegerField(default=0)
-    note = models.TextField(default="", null=True)
+    etalon_solution = models.FileField(upload_to=upload_to, default=None, null=True)
+    generator_test = models.FileField(upload_to=upload_to,default=None, null=True)
+    checker = models.FileField(upload_to=upload_to, default=None, null=True)
+    score = models.IntegerField(default=0, editable=False)
+    is_hidden = models.BooleanField(default=False)
+    note = models.TextField(default="", null=True, blank=True)
     
-    
-    def __get_path(self) -> str:
-        directory = "apps/problems/testcases/"
-        if not os.path.exists(directory):
-            os.makedirs(directory)
-            
-        directory += str(self.uuid)
-        os.makedirs(directory + "/generator")
-        os.makedirs(directory + "/solution")
-        os.makedirs(directory + "/tests")
-        os.makedirs(directory + "/checkers")
-        return directory
-    
-    def __make_etalons(self, etalon_thing, directory: str, is_generator_test=False):
-        if etalon_thing:
-            if not is_generator_test:
-                dest_path = f"{directory}/solution/{os.path.basename(etalon_thing.name)}"
-            else:
-                os.makedirs(f"{directory}/generator", exist_ok=True)
-                dest_path = f"{directory}/generator/{os.path.basename(etalon_thing.name)}"
-            with open(dest_path, 'wb+') as destination:
-                for chunk in etalon_thing.chunks():
-                    destination.write(chunk)
-        else:
-            raise ValueError("Etalon solution or generator test file is missing.")
-    
-    
-    def __make_checker(self, checker_file, directory: str):
-        if checker_file:
-            dest_path = f"{directory}/checkers/{os.path.basename(checker_file.name)}"
-            with open(dest_path, 'wb+') as destination:
-                for chunk in checker_file.chunks():
-                    destination.write(chunk)
-        else:
-            raise ValueError("Checker file is missing.")
-            
-            
     def save(self, *args, **kwargs):
         if not self.slug:
             self.slug = slugify(self.title)
-            
-        directory = self.__get_path()
+        super().save(*args, **kwargs)
+        solution_path = self.etalon_solution.path
+        generator_path = self.generator_test.path
+        base_dir = os.path.dirname(self.generator_test.path)
+        tests_path = os.path.join(base_dir, "tests")
         
-        #generate etalon_solution file for a new task
-        self.__make_etalons(self.etalon_solution, directory)
-        
-        #generate generator_task file for a new task
-        self.__make_etalons(self.generator_test, directory, is_generator_test=True)
-        self.__make_checker(self.checker, directory)
-        solution_path = directory + "/solution/" + self.etalon_solution.name
-        generator_path = directory + "/generator/" + self.generator_test.name
-        tests_path = directory + "/tests/"
-        
-        
-        ### object runner in order to run files
         runner = Runner(
             solution_path=solution_path,
             generator_path=generator_path,
             tests_path=tests_path,
+            timeout=self.time_limit_ms / 1000
         )
-
-        ### running the main generator        
-        runner.main_generator()
-        ### running the main generator
         
+        runner.main_generator()
         self.score = len(os.listdir(tests_path)) // 2
-
         super().save(*args, **kwargs)
 
 
     def delete(self, *args, **kwargs):
-        directory = "apps/problems/testcases/" + str(self.uuid)
-        deleted_files_directory = "deleted_testcases/"
+        print("XUYNYA")
+        directory = os.path.join(settings.PROBLEMS_PATH, str(self.uuid))
+        destination = os.path.join(settings.STORAGE_PATH, str(self.slug))
         
-        if not os.path.exists(deleted_files_directory):
-            os.makedirs(deleted_files_directory)
+        if not os.path.exists(destination):
+            os.makedirs(destination)
         
         if os.path.exists(directory):
-            destination = os.path.join(deleted_files_directory, str(self.uuid))
             shutil.copytree(directory, destination, dirs_exist_ok=True)
             shutil.rmtree(directory)
-        
+            
         super().delete(*args, **kwargs)
-
-
+        
+        
     def get_category_slug(self):
         first_tag = self.tags.first()
         if first_tag:
@@ -160,15 +115,13 @@ class Problem(models.Model):
         
         
     def show_testcases(self):
-        directory = "apps/problems/testcases/" + str(self.uuid)
-        tests_path = directory + "/tests/"
+        directory = os.path.join(settings.PROBLEMS_PATH, str(self.uuid))
+        tests_path = os.path.join(directory, "tests")
         examples = TestcaseReturner(tests_path=tests_path)
-        testcases = examples.show_testcases()
-        return testcases
+        return examples.show_testcases(limit=3)
+
         
         
-    
-    
     def __str__(self):
         return self.title
 

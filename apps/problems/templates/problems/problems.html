@@ -4,50 +4,89 @@
 
 {% block problems %}  
 <link rel="stylesheet" href="{% static 'css/problems.css' %}">
-<div class="problems-container">
-    <div class="problems-header">
-        <h1>🎃 Задачки 🎃</h1>
-    </div>
-
-    {% if problems %}
-        <table class="problems-table">
-            <thead>
-                <tr>
-                    <th>Title</th>
-                    <th>Difficulty</th>
-                    <th>Created</th>
-                </tr>
-            </thead>
-            <tbody>
-                {% for problem in problems %}
-                <tr>
-                    <td>
-                        <a href="{{ problem.get_absolute_url }}" class="problem-title">
-                            {% comment %}
-                            {% if problem.is_solved_by_user %}
-                                <span class="problem-solved">✅</span>
-                            {% endif %}
-                            {% endcomment %}
-                            {{ problem.title }}
-                        </a>
-                    </td>
-                    <td>
-                        <span class="difficulty-badge difficulty-{{ problem.difficulty }}">
-                            {{ problem.get_difficulty_display }}
-                        </span>
-                    </td>
-                    <td class="created-date">
-                        {{ problem.created_at|date:"M d, Y" }}
-                    </td>
-                </tr>
-                {% endfor %}
-            </tbody>
-        </table>
-    {% else %}
-        <div class="no-problems">
-            <h3>👻 No problems yet</h3>
-            <p>Check back later for new spooky challenges!</p>
+<div class="problems-main-layout">
+    <!-- Left: Problems Table -->
+    <div class="problems-left">
+        <div class="problems-header">
+            <h1>🎃 Задачки 🎃</h1>
         </div>
-    {% endif %}
+        {% if problems %}
+            <table class="problems-table">
+                <thead>
+                    <tr>
+                        <th>Title</th>
+                        <th>Difficulty</th>
+                        <th>Tags</th>
+                        <th>Created</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for problem in problems %}
+                    <tr class="{% if problem.is_solved %}row-solved{% elif problem.is_tried %}row-tried{% endif %}">
+                        <td>
+                            <a href="{{ problem.get_absolute_url }}" class="problem-title">
+                                {{ problem.title }}
+
+                                {% if problem.is_solved %}
+                                    <span class="status-badge status-solved">Solved</span>
+                                {% elif problem.is_tried %}
+                                    <span class="status-badge status-tried">Tried</span>
+                                {% else %}
+                                    <span class="status-badge status-none">—</span>
+                                {% endif %}
+                            </a>
+                        </td>
+                        <td>
+                            <span class="difficulty-badge difficulty-{{ problem.difficulty }}">
+                                {{ problem.get_difficulty_display }}
+                            </span>
+                        </td>
+                        <td class="created-date">
+                            {% for tag in problem.tags.all %}
+                                {{ tag.name }}{% if not forloop.last %}, {% endif %}
+                            {% empty %}
+                                No tags
+                            {% endfor %}
+                        </td>
+                        <td class="created-date">
+                            {{ problem.created_at|date:"M d, Y" }}
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <div class="no-problems">
+                <h3>👻 No problems yet</h3>
+                <p>Check back later for new spooky challenges!</p>
+            </div>
+        {% endif %}
+    </div>
+    <!-- Right: Filtering Panel -->
+    <div class="problems-right">
+        <form method="get" class="problems-filter-form">
+            <h2>🔎 Filter</h2>
+            <input type="text" name="q" placeholder="Search by name..." value="{{ request.GET.q }}">
+            <label>Tag:</label>
+            <select name="tag">
+                <option value="">All Tags</option>
+                {% for tag in tags %}
+                    <option value="{{ tag.id }}" {% if request.GET.tag == tag.id|stringformat:"s" %}selected{% endif %}>{{ tag.name }}</option>
+                {% endfor %}
+            </select>
+            <label>Difficulty:</label>
+            <select name="difficulty">
+                <option value="">All Difficulties</option>
+                <option value="easy" {% if request.GET.difficulty == "easy" %}selected{% endif %}>Easy</option>
+                <option value="medium" {% if request.GET.difficulty == "medium" %}selected{% endif %}>Medium</option>
+                <option value="hard" {% if request.GET.difficulty == "hard" %}selected{% endif %}>Hard</option>
+            </select>
+            <label>Date from:</label>
+            <input type="date" name="date_from" value="{{ request.GET.date_from }}">
+            <label>Date to:</label>
+            <input type="date" name="date_to" value="{{ request.GET.date_to }}">
+            <button type="submit" class="filter-btn">Apply</button>
+        </form>
+    </div>
 </div>
 {% endblock problems %}
