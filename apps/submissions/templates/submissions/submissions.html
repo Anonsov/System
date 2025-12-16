@@ -5,12 +5,36 @@
 
 {% block submissions %}
 <link rel="stylesheet" href="{% static 'css/submissions.css' %}"> 
+{% comment %} <link rel="stylesheet" href="{% static 'css/problems.css' %}">  {% endcomment %}
 <div class="submissions-container">
     <div class="submissions-header">
         <h1>🎃 Посылки 🎃</h1>
     </div>
-
+    <form method="get" class="submissions-filter-form">
+    <input type="text" name="problem" placeholder="Problem name..." value="{{ request.GET.problem }}">
+    <select name="status">
+    <option value="">All Statuses</option>
+    {% for value, label in statuses %}
+        <option value="{{ value }}" {% if request.GET.status == value %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+</select>
+    <select name="language">
+    <option value="">All Languages</option>
+    {% for value, label in languages %}
+        <option value="{{ value }}" {% if request.GET.language == value %}selected{% endif %}>{{ label }}</option>
+    {% endfor %}
+</select>
+    <label>
+        <input type="checkbox" name="my_submissions" value="1" {% if request.GET.my_submissions %}checked{% endif %}>
+        Show mine
+    </label>
+    <input type="date" name="date_from" value="{{ request.GET.date_from }}">
+    <input type="date" name="date_to" value="{{ request.GET.date_to }}">
+    <button type="submit" class="filter-btn">Filter</button>
+</form>
     {% if submissions %}
+    <!-- Add this above your table in submissions.html -->
+
         <table class="submissions-table">
             <thead>
                 <tr>

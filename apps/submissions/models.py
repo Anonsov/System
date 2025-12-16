@@ -36,8 +36,5 @@ class Submission(models.Model):
     
     class Meta:
         ordering = ["-created_at"]
-        db_table = "problems_submission"
-        
-        
     def __str__(self):
         return f"Submission {self.id} by {self.user.username}"

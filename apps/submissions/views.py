@@ -1,17 +1,18 @@
 from typing import Any
-from django.shortcuts import render, get_object_or_404, redirect
-from django.views.generic import TemplateView, View
+# from django.shortcuts import render, get_object_or_404, redirect
+# from django.views.generic import TemplateView, View
 from .serializers import SubmissionSerializer, UpdateSubmissionSerializer
 from rest_framework.response import Response
 from rest_framework import generics, status
 from .models import Submission
 from django.views.generic.list import ListView
-from apps.problems.models import Problem
-from django.views.generic.edit import FormMixin
+# from apps.problems.models import Problem
+# from django.views.generic.edit import FormMixin
 from django.contrib import messages
 from django.views.generic.detail import DetailView 
 from .forms import ReadOnlyCodeForm
-from rest_framework.generics import RetrieveUpdateAPIView
+# from rest_framework.generics import RetrieveUpdateAPIView
+from apps.problems.forms import CodeForm
 # from runner.base import Runner
 
 
@@ -25,8 +26,36 @@ class SubmissionsMainPageView(ListView):
     context_object_name = "submissions"
     ordering = ["-created_at"]
     
+    
     def get_queryset(self):
-        return Submission.objects.all()
+        queryset = super().get_queryset()
+        problem = self.request.GET.get('problem')
+        status = self.request.GET.get('status')
+        language = self.request.GET.get('language')
+        date_from = self.request.GET.get('date_from')
+        date_to = self.request.GET.get('date_to')
+        my_submissions = self.request.GET.get('my_submissions')
+
+        if problem:
+            queryset = queryset.filter(problem__title__icontains=problem)
+        if status:
+            queryset = queryset.filter(status=status)
+        if language:
+            queryset = queryset.filter(language=language)
+        if date_from:
+            queryset = queryset.filter(created_at__date__gte=date_from)
+        if date_to:
+            queryset = queryset.filter(created_at__date__lte=date_to)
+        if my_submissions and self.request.user.is_authenticated:
+            queryset = queryset.filter(user=self.request.user)
+        return queryset
+    
+    
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['statuses'] = Submission.Status.choices
+        context['languages'] = CodeForm.LanguageChoices.choices
+        return context
 
 
 class SubmissionDetailView(DetailView):
