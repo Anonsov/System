@@ -1,0 +1,107 @@
+.home-container {
+    max-width: 1200px;
+    margin: 40px auto;
+    padding: 30px;
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
+    border-radius: 15px;
+    box-shadow: 0 10px 40px rgba(255, 107, 0, 0.3);
+    border: 2px solid #ff6b00;
+}
+.welcome-section {
+    text-align: center;
+    margin-bottom: 40px;
+}
+.welcome-section h1 {
+    color: #ff6b00;
+    font-size: 3em;
+    text-shadow: 0 0 20px rgba(255, 107, 0, 0.5);
+    font-family: 'Creepster', cursive;
+    animation: flicker 3s infinite;
+}
+.quick-links {
+    display: flex;
+    justify-content: center;
+    gap: 25px;
+    margin-bottom: 40px;
+    flex-wrap: wrap;
+}
+.home-card {
+    background: rgba(255, 107, 0, 0.15);
+    color: #ffa500;
+    border: 2px solid #ff6b00;
+    border-radius: 12px;
+    padding: 30px 40px;
+    font-size: 1.3em;
+    font-weight: bold;
+    text-decoration: none;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 15px rgba(255, 107, 0, 0.2);
+}
+.home-card:hover {
+    background: linear-gradient(135deg, #ff6b00, #ff8c00);
+    color: #1a1a2e;
+    transform: translateY(-5px) scale(1.05);
+    box-shadow: 0 8px 30px rgba(255, 107, 0, 0.4);
+}
+.featured-section, .news-section {
+    margin-top: 40px;
+    background: rgba(22, 33, 62, 0.7);
+    border-radius: 10px;
+    padding: 25px 30px;
+    border: 1px solid #ff6b00;
+}
+.featured-section h2, .news-section h2 {
+    color: #ffa500;
+    margin-bottom: 20px;
+    font-size: 1.5em;
+    text-shadow: 0 0 10px rgba(255, 165, 0, 0.4);
+}
+.leaderboard-list {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+.leaderboard-user {
+    background: rgba(255, 107, 0, 0.12);
+    border: 2px solid #ff6b00;
+    border-radius: 10px;
+    padding: 18px 25px;
+    color: #ffa500;
+    font-weight: bold;
+    min-width: 160px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(255, 107, 0, 0.15);
+}
+.leaderboard-user .avatar {
+    width: 48px;
+    height: 48px;
+    border-radius: 50%;
+    border: 2px solid #ff6b00;
+    margin-bottom: 8px;
+    object-fit: cover;
+}
+.problem-list {
+    display: flex;
+    gap: 25px;
+    flex-wrap: wrap;
+}
+.problem-card {
+    background: rgba(255, 107, 0, 0.10);
+    border: 2px solid #ff6b00;
+    border-radius: 10px;
+    padding: 18px 25px;
+    color: #ffa500;
+    min-width: 180px;
+    text-align: center;
+    box-shadow: 0 2px 10px rgba(255, 107, 0, 0.15);
+    transition: all 0.3s ease;
+}
+.problem-card:hover {
+    background: linear-gradient(135deg, #ff6b00, #ff8c00);
+    color: #1a1a2e;
+    transform: translateY(-3px) scale(1.04);
+}
+@keyframes flicker {
+    0%, 100% { opacity: 1; }
+    50% { opacity: 0.8; }
+}

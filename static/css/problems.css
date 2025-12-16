@@ -1,21 +1,27 @@
-.problems-container {
-    max-width: 1400px;
+/* Main layout: left (table) and right (filters) */
+.problems-main-layout {
+    display: flex;
+    gap: 30px;
+    align-items: flex-start;
     margin: 40px auto;
-    padding: 30px;
-    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%);
-    border-radius: 15px;
-    box-shadow: 0 10px 40px rgba(255, 107, 0, 0.3);
-    border: 2px solid #ff6b00;
+    max-width: 1400px;
+    padding: 0 20px;
+}
+
+/* Left side: Problems table (70-80%) */
+.problems-left {
+    flex: 7 1 0;
+    min-width: 0;
 }
 
 .problems-header {
     text-align: center;
-    margin-bottom: 40px;
+    margin-bottom: 30px;
 }
 
 .problems-header h1 {
     color: #ff6b00;
-    font-size: 3em;
+    font-size: 2.5em;
     text-shadow: 0 0 20px rgba(255, 107, 0, 0.5);
     font-family: 'Creepster', cursive;
     animation: flicker 3s infinite;
@@ -135,6 +141,75 @@
     font-size: 1.1em;
 }
 
+/* Right side: Filtering panel (20-30%) */
+.problems-right {
+    flex: 3 1 0;
+    min-width: 260px;
+    max-width: 350px;
+    background: rgba(26, 26, 46, 0.95);
+    border-radius: 14px;
+    border: 2px solid #ff6b00;
+    box-shadow: 0 5px 20px rgba(255, 107, 0, 0.15);
+    padding: 30px 25px;
+    margin-top: 30px;
+    position: sticky;
+    top: 100px;
+    height: fit-content;
+}
+
+.problems-filter-form {
+    display: flex;
+    flex-direction: column;
+    gap: 18px;
+}
+
+.problems-filter-form h2 {
+    color: #ffa500;
+    font-size: 1.3em;
+    margin-bottom: 10px;
+    text-align: left;
+}
+
+.problems-filter-form input[type="text"],
+.problems-filter-form select,
+.problems-filter-form input[type="date"] {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 2px solid #ff6b00;
+    background: rgba(22, 33, 62, 0.9);
+    color: #e0e0e0;
+    font-size: 1em;
+    margin-bottom: 5px;
+    transition: all 0.3s ease;
+}
+
+.problems-filter-form input:focus,
+.problems-filter-form select:focus {
+    border-color: #ff8c00;
+    outline: none;
+    background: rgba(22, 33, 62, 1);
+}
+
+.filter-btn {
+    padding: 12px 0;
+    background: linear-gradient(135deg, #ff6b00, #ff8c00);
+    color: #1a1a2e;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(255, 107, 0, 0.3);
+    margin-top: 10px;
+}
+
+.filter-btn:hover {
+    background: linear-gradient(135deg, #ff8c00, #ffaa00);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 0, 0.5);
+}
+
 /* Animations */
 @keyframes flicker {
     0%, 100% { opacity: 1; }
@@ -142,59 +217,70 @@
 }
 
 /* Responsive design */
-@media (max-width: 968px) {
-    .problems-container {
-        padding: 20px;
-        margin: 20px;
+@media (max-width: 1100px) {
+    .problems-main-layout {
+        flex-direction: column;
     }
-    
-    .problems-header h1 {
-        font-size: 2em;
+    .problems-left, .problems-right {
+        max-width: 100%;
+        width: 100%;
     }
-    
-    .problems-table {
-        font-size: 0.9em;
-    }
-    
-    .problems-table th,
-    .problems-table td {
-        padding: 10px 8px;
-    }
-    
-    .problem-title {
-        font-size: 1em;
+    .problems-right {
+        margin-top: 30px;
+        position: static;
     }
 }
 
-@media (max-width: 600px) {
-    .problems-table th:nth-child(3),
-    .problems-table td:nth-child(3) {
-        display: none; /* Hide created date on small screens */
-    }
+/* ...existing code... */
+
+/* Status badges (Solved / Tried) */
+.status-badge {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    padding: 4px 10px;
+    border-radius: 999px;
+    font-weight: 800;
+    font-size: 0.82em;
+    text-transform: uppercase;
+    letter-spacing: 0.7px;
+    margin-left: 10px;
+    vertical-align: middle;
 }
 
-/* Scrollbar styling */
-.problems-container::-webkit-scrollbar {
-    width: 10px;
+.status-solved {
+    background: linear-gradient(135deg, rgba(0, 255, 0, 0.25), rgba(0, 204, 0, 0.15));
+    border: 1px solid rgba(0, 255, 0, 0.55);
+    color: #b6ffb6;
+    box-shadow: 0 0 14px rgba(0, 255, 0, 0.18);
 }
 
-.problems-container::-webkit-scrollbar-track {
-    background: rgba(26, 26, 46, 0.8);
-    border-radius: 5px;
+.status-tried {
+    background: linear-gradient(135deg, rgba(255, 170, 0, 0.25), rgba(255, 136, 0, 0.15));
+    border: 1px solid rgba(255, 170, 0, 0.55);
+    color: #ffd7a3;
+    box-shadow: 0 0 14px rgba(255, 170, 0, 0.18);
 }
 
-.problems-container::-webkit-scrollbar-thumb {
-    background: #ff6b00;
-    border-radius: 5px;
+.status-none {
+    opacity: 0.6;
 }
 
-.problems-container::-webkit-scrollbar-thumb:hover {
-    background: #ff8c00;
+/* Make solved rows stand out a bit */
+.problems-table tbody tr.row-solved {
+    background: linear-gradient(90deg, rgba(0, 255, 0, 0.10), rgba(22, 33, 62, 0.9) 45%);
+    border-bottom: 1px solid rgba(0, 255, 0, 0.22);
 }
 
-/* Optional: Add solved indicator icon */
-.problem-solved {
-    color: #00ff00;
-    margin-right: 8px;
-    font-size: 1.2em;
+.problems-table tbody tr.row-solved:hover {
+    background: linear-gradient(90deg, rgba(0, 255, 0, 0.14), rgba(255, 107, 0, 0.16) 70%);
+    box-shadow: 0 3px 18px rgba(0, 255, 0, 0.18);
 }
+
+/* Optional: tried rows slightly different */
+.problems-table tbody tr.row-tried {
+    background: linear-gradient(90deg, rgba(255, 170, 0, 0.09), rgba(22, 33, 62, 0.9) 45%);
+    border-bottom: 1px solid rgba(255, 170, 0, 0.18);
+}
+
+/* ...existing code... */

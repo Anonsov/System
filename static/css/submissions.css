@@ -245,3 +245,91 @@
 .submissions-container::-webkit-scrollbar-thumb:hover {
     background: #ff8c00;
 }
+
+/* ...existing styles... */
+
+.submissions-filter-form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 18px 20px;
+    align-items: flex-end;
+    margin-bottom: 30px;
+    background: rgba(26, 26, 46, 0.95);
+    border-radius: 12px;
+    border: 2px solid #ff6b00;
+    padding: 22px 18px;
+    box-shadow: 0 3px 15px rgba(255, 107, 0, 0.12);
+}
+
+.submissions-filter-form input[type="text"],
+.submissions-filter-form select,
+.submissions-filter-form input[type="date"] {
+    padding: 10px 12px;
+    border-radius: 8px;
+    border: 2px solid #ff6b00;
+    background: rgba(22, 33, 62, 0.9);
+    color: #e0e0e0;
+    font-size: 1em;
+    margin-bottom: 0;
+    transition: all 0.3s ease;
+    min-width: 160px;
+}
+
+.submissions-filter-form input:focus,
+.submissions-filter-form select:focus {
+    border-color: #ff8c00;
+    outline: none;
+    background: rgba(22, 33, 62, 1);
+}
+
+.submissions-filter-form label {
+    color: #ffa500;
+    font-size: 1em;
+    font-weight: 500;
+    display: flex;
+    align-items: center;
+    gap: 7px;
+    margin-bottom: 0;
+}
+
+.submissions-filter-form input[type="checkbox"] {
+    accent-color: #ff6b00;
+    width: 18px;
+    height: 18px;
+}
+
+.filter-btn {
+    padding: 12px 28px;
+    background: linear-gradient(135deg, #ff6b00, #ff8c00);
+    color: #1a1a2e;
+    border: none;
+    border-radius: 8px;
+    font-weight: bold;
+    font-size: 1.1em;
+    cursor: pointer;
+    transition: all 0.3s ease;
+    box-shadow: 0 3px 10px rgba(255, 107, 0, 0.3);
+    margin-left: 10px;
+}
+
+.filter-btn:hover {
+    background: linear-gradient(135deg, #ff8c00, #ffaa00);
+    transform: translateY(-2px);
+    box-shadow: 0 5px 15px rgba(255, 107, 0, 0.5);
+}
+
+/* Responsive */
+@media (max-width: 900px) {
+    .submissions-filter-form {
+        flex-direction: column;
+        gap: 14px 0;
+        padding: 16px 8px;
+    }
+    .submissions-filter-form input,
+    .submissions-filter-form select {
+        min-width: 0;
+        width: 100%;
+    }
+}
+
+
