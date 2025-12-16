@@ -12,9 +12,9 @@
     <nav class="navbar">
         <!-- Left: Logo -->
         <div class="navbar-left">
-            {% comment %} <a href="{% url 'home:HomeMainPage' %}"> {% endcomment %}
+            <a href="{% url 'home:HomePage' %}">
                 <img src="{% static 'images/logo.png' %}" alt="Nightmare Logo" class="navbar-logo">
-            {% comment %} </a> {% endcomment %}
+            </a>
         </div>
         
         <!-- Mobile menu toggle -->
@@ -65,6 +65,8 @@
         {% block detail %}{% endblock detail %}
         {% block submission_detail %}{% endblock submission_detail %}
         {% block profile %}{% endblock profile %}
+        {% block archive_detail %}{% endblock archive_detail %}
+            
     </div>
     
     <!-- Optional footer -->
