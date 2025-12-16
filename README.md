@@ -1,0 +1,1 @@
+Platform like leetcode from scratch by myself
