@@ -47,6 +47,7 @@ INSTALLED_APPS = [
     'apps.accounts',
     'django_ace',
     'rest_framework',
+    'apps.runner',
 ]
 
 MIDDLEWARE = [
@@ -149,9 +150,34 @@ LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = "/accounts/login/"
 
 
+
 REST_FRAMEWORK = {
     'DEFAULT_RENDERER_CLASSES': [
         'rest_framework.renderers.JSONRenderer',
         'rest_framework.renderers.BrowsableAPIRenderer',
     ]
 }
+
+
+PROBLEMS_PATH = os.path.join(MEDIA_ROOT, "problems")
+
+STORAGE_PATH = os.path.join(BASE_DIR, "storage")
+SCRIPT_PATH = os.path.join(BASE_DIR, "scripts")
+WORKER_PATH = os.path.join(BASE_DIR, "judge_worker")
+ABRAMYAN_PATH = os.path.join(BASE_DIR, "book")
+
+CELERY_TASK_ROUTES = {
+    "apps.submissions.tasks.judge_submission": {"queue": "judge"},
+}
+
+CELERY_WORKER_PREFETCH_MULTIPLIER = 1
+CELERY_TASK_ACKS_LATE = True
+
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
+
+CELERY_WORKER_MAX_TASKS_PER_CHILD = 50
+CELERY_WORKER_MAX_MEMORY_PER_CHILD = 300000
+
+CELERY_TASK_SOFT_TIME_LIMIT = 120
+CELERY_TASK_TIME_LIMIT = 130
