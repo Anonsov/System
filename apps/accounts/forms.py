@@ -40,6 +40,7 @@ class RegisterUserForm(UserCreationForm):
             raise forms.ValidationError("Такой e-mail уже существует")
         return email
     
+    
 class AvatarUpdateForm(forms.ModelForm):
     class Meta:
         model = Profile
