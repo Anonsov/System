@@ -1,7 +1,52 @@
+{# filepath: /home/anonsina/All/System/apps/archive/templates/archive/archive.html #}
 {% extends "base.html" %}
-
+{% load static %}
 
 {% block archive %}
-    <p>this is archive</p>
+<link rel="stylesheet" href="{% static 'css/problems.css' %}">
+
+<div class="problems-main-layout">
+  <!-- Left: Sections Table -->
+  <div class="problems-left">
+    <div class="problems-header">
+      <h1>Archive</h1>
+    </div>
+
+    {% if sections %}
+      <table class="problems-table">
+        <thead>
+          <tr>
+            <th>Section</th>
+            <th>Slug</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for section in sections %}
+            <tr>
+              <td>
+                <a href="{% url 'archive:ArchiveSectionDetail' section.slug %}" class="problem-title">
+                  {{ section.name }}
+                </a>
+              </td>
+              <td class="created-date">{{ section.slug }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="no-problems">
+        <h3>No sections yet</h3>
+      </div>
+    {% endif %}
+  </div>
+
+  <!-- Right: Filtering Panel -->
+  <div class="problems-right">
+    <form method="get" class="problems-filter-form">
+      <h2>Filter</h2>
+      <input type="text" name="q" placeholder="Search section..." value="{{ request.GET.q }}">
+      <button type="submit" class="filter-btn">Apply</button>
+    </form>
+  </div>
+</div>
 {% endblock archive %}
-    

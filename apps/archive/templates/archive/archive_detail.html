@@ -1,0 +1,96 @@
+{# filepath: /home/anonsina/All/System/apps/archive/templates/archive/archive_detail.html #}
+{% extends "base.html" %}
+{% load static %}
+
+{# filepath: /home/anonsina/All/System/apps/archive/templates/archive/archive_detail.html #}
+{# ...existing code... #}
+
+{% block archive_detail %}
+<link rel="stylesheet" href="{% static 'css/problems.css' %}">
+
+<style>
+  /* Local-only styles for archive detail header */
+  .archive-detail-header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    flex-wrap: wrap;
+    margin-bottom: 12px;
+  }
+
+  .archive-detail-header h1 {
+    margin: 0;
+    line-height: 1.2;
+  }
+
+  .archive-back-btn {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    padding: 6px 10px;
+    font-size: 0.9rem;
+    line-height: 1;
+    border-radius: 10px;
+    white-space: nowrap;
+  }
+</style>
+
+<div class="problems-main-layout">
+  <div class="problems-left">
+    <div class="problems-header archive-detail-header">
+      <h1>{{ section.name }}</h1>
+      <a href="{% url 'archive:ArchiveMainPage' %}" class="filter-btn archive-back-btn">Back to sections</a>
+    </div>
+
+    {% if book_problems %}
+      <table class="problems-table">
+        <thead>
+          <tr>
+            <th>Title</th>
+            <th>Difficulty</th>
+            <th>Tags</th>
+            <th>Slug</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% for bp in book_problems %}
+            <tr>
+              <td>
+                <a href="{{ bp.problem.get_absolute_url }}" class="problem-title">
+                  {{ bp.problem.title }}
+                </a>
+              </td>
+              <td>
+                <span class="difficulty-badge difficulty-{{ bp.problem.difficulty }}">
+                  {{ bp.problem.get_difficulty_display }}
+                </span>
+              </td>
+              <td class="created-date">
+                {% for tag in bp.problem.tags.all %}
+                  {{ tag.name }}{% if not forloop.last %}, {% endif %}
+                {% empty %}
+                  No tags
+                {% endfor %}
+              </td>
+              <td class="created-date">{{ bp.problem.slug }}</td>
+            </tr>
+          {% endfor %}
+        </tbody>
+      </table>
+    {% else %}
+      <div class="no-problems">
+        <h3>No problems in this section.</h3>
+      </div>
+    {% endif %}
+  </div>
+
+  <div class="problems-right">
+    <form method="get" class="problems-filter-form">
+      <h2>Filter</h2>
+      <input type="text" name="q" placeholder="Search problem..." value="{{ request.GET.q }}">
+      <button type="submit" class="filter-btn">Apply</button>
+    </form>
+  </div>
+</div>
+{% endblock archive_detail %}
