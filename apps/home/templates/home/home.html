@@ -1,7 +1,54 @@
+<!-- filepath: /home/anonsina/All/System/apps/home/templates/home/home.html -->
 {% extends "base.html" %}
+{% load static %}
 
-
-{% block home %}    
-    <p>home</p>
+{% block home %}
+<link rel="stylesheet" href="{% static 'css/home.css' %}">
+<div class="home-container">
+    <div class="welcome-section">
+        <h1>🎃 Welcome to Nightmare Online Judge 🎃</h1>
+        <p>Compete, solve problems, and climb the leaderboard in a spooky coding world!</p>
+    </div>
+    <div class="quick-links">
+        <a href="{% url 'contests:ContestsMainPage' %}" class="home-card">Contests</a>
+        <a href="{% url 'problems:ProblemsMainPage' %}" class="home-card">Problems</a>
+        <a href="{% url 'submissions:SubmissionsMainPage' %}" class="home-card">Submissions</a>
+        <a href="{% url 'archive:ArchiveMainPage' %}" class="home-card">Archive</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'accounts:profile' %}" class="home-card">Profile</a>
+        {% endif %}
+    </div>
+    <div class="featured-section">
+        <h2>Leaderboard</h2>
+        <div class="leaderboard-list">
+            {% for leader in leaderboard %}
+                <div class="leaderboard-user">
+                    {% if leader.avatar %}
+                        <img src="{{ leader.avatar.url }}" class="avatar" alt="{{ leader.user.username }}">
+                    {% else %}
+                        <img src="{% static 'img/default_avatar.png' %}" class="avatar" alt="default">
+                    {% endif %}
+                    <div>{{ leader.user.username }}</div>
+                    <div>🎯 Score: {{ leader.score }}</div>
+                    <div>✅ Solved: {{ leader.solved_count }}</div>
+                </div>
+            {% endfor %}
+        </div>
+    </div>
+    <div class="news-section">
+        <h2>Latest Problems</h2>
+        <div class="problem-list">
+            {% for problem in featured_problems %}
+                <a href="{{ problem.get_absolute_url }}" class="problem-card">
+                    <div>{{ problem.title }}</div>
+                    <div>
+                        <span class="difficulty-badge difficulty-{{ problem.difficulty }}">
+                            {{ problem.get_difficulty_display }}
+                        </span>
+                    </div>
+                </a>
+            {% endfor %}
+        </div>
+    </div>
+</div>
 {% endblock home %}
-    
