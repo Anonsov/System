@@ -1,0 +1,4 @@
+import json, random
+if __name__ == "__main__":
+    tests = [{"input": [str(random.randint(1, 1000)), str(random.randint(1, 9))]} for _ in range(20)]
+    print(json.dumps(tests))
