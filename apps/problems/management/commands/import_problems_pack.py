@@ -30,6 +30,7 @@ class Command(BaseCommand):
         parser.add_argument("--hidden", action="store_true", help="Set is_hidden=True on imported problems (requires field).")
         parser.add_argument("--dry-run", action="store_true", help="Only validate, do not write into DB.")
 
+
     def handle(self, *args, **opts):
         tasks = load_pack(opts["module"], opts["var"])
 
@@ -75,5 +76,8 @@ class Command(BaseCommand):
 
             created += 1
             self.stdout.write(self.style.SUCCESS(f"Imported: {title}"))
+            break
 
         self.stdout.write(self.style.SUCCESS(f"Done. created={created}"))
+        
+        

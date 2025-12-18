@@ -23,6 +23,7 @@ class Runner:
         
         
     def input_generator(self):
+        
         outputs = subprocess.run(["python3", f"{self.generator_path}"],
                                   capture_output=True,
                                   text=True)
@@ -41,7 +42,11 @@ class Runner:
 
     def output_generator(self):
           
-        input_files = sorted([f for f in os.listdir(self.tests_path)])
+        # Only process input files (*.in) in numeric order
+        input_files = sorted(
+            [f for f in os.listdir(self.tests_path) if f.endswith('.in')],
+            key=lambda name: int(name.split('.')[0])
+        )
         
         for input_file in input_files:
             test_num = input_file.split('.')[0]
@@ -101,7 +106,7 @@ class TestcaseReturner:
             input_path = os.path.join(self.tests_path, f"{i}.in")
             output_path = os.path.join(self.tests_path, f"{i}.out")
 
-            # skip incomplete pairs
+            # skip not completed pairs
             if not os.path.exists(output_path):
                 continue
 
@@ -116,6 +121,5 @@ class TestcaseReturner:
     def open_file_read(self, path: str):
         with open(path, "r") as f:
             return f.readlines()
-       
-        
-    
+
+

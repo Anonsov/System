@@ -284,3 +284,104 @@
 }
 
 /* ...existing code... */
+/* Pagination */
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 107, 0, 0.25);
+  margin-top: 16px;
+}
+
+.pagination a,
+.pagination span.page-number {
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 107, 0, 0.35);
+  border-radius: 6px;
+  text-decoration: none;
+  color: #ffd7a3;
+  background: rgba(26, 26, 46, 0.85);
+}
+
+.pagination a:hover {
+  background: rgba(255, 107, 0, 0.15);
+  color: #ffca7a;
+}
+
+.pagination .current {
+  border-color: #ff6b00;
+  color: #ff6b00;
+  font-weight: 700;
+  background: rgba(22, 33, 62, 0.9);
+}
+
+.pagination .disabled {
+  color: #9ca3af;
+  border-color: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+/* Compact on mobile */
+@media (max-width: 600px) {
+  .pagination {
+    gap: 6px;
+    font-size: 13px;
+  }
+  .pagination a,
+  .pagination span.page-number {
+    padding: 5px 8px;
+  }
+}
+
+.pagination {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+  align-items: center;
+  justify-content: center;
+  padding: 12px 0;
+  border-top: 1px solid rgba(255, 107, 0, 0.25);
+  margin-top: 16px;
+}
+
+.pagination a,
+.pagination span.page-number {
+  padding: 6px 10px;
+  border: 1px solid rgba(255, 107, 0, 0.35);
+  border-radius: 6px;
+  text-decoration: none;
+  color: #ffa500;
+  background: rgba(26, 26, 46, 0.85);
+}
+
+.pagination a:hover {
+  background: rgba(255, 107, 0, 0.15);
+  color: #ff8c00;
+}
+
+.pagination .current {
+  border-color: #ff6b00;
+  color: #ff6b00;
+  font-weight: 700;
+  background: rgba(22, 33, 62, 0.9);
+}
+
+.pagination .disabled {
+  color: #9ca3af;
+  border-color: rgba(255, 255, 255, 0.08);
+  pointer-events: none;
+}
+
+@media (max-width: 600px) {
+  .pagination {
+    gap: 6px;
+    font-size: 13px;
+  }
+  .pagination a,
+  .pagination span.page-number {
+    padding: 5px 8px;
+  }
+}

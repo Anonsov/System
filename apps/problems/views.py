@@ -4,7 +4,7 @@ from django.views.generic import DetailView
 from django.views.generic.list import ListView
 from django.views.generic.edit import FormMixin
 from django.urls import reverse
-from django.contrib import messages
+# from django.contrib import messages
 from django.db.models import Exists, OuterRef
 from .forms import CodeForm
 from .models import Problem
@@ -100,6 +100,7 @@ class ProblemDetailView(FormMixin, DetailView):
             qs = Submission.objects.filter(user=user, problem=problem)
             context["is_tried"] = qs.exists()
             context["is_solved"] = qs.filter(status=Submission.Status.ACCEPTED).exists()
+            context["submission_sent"] = qs.count()
         else:
             context["is_tried"] = False
             context["is_solved"] = False
@@ -127,7 +128,6 @@ class ProblemDetailView(FormMixin, DetailView):
             )
             submission_tasks.judge_submission.apply_async((submission.id,), queue="judge") #type: ignore
 
-            messages.success(request, f'Решение отправлено под ID: {submission.id}')
             
             return redirect(reverse('submissions:RunSubmission', args=[submission.id]))
         else:
@@ -138,4 +138,4 @@ class ProblemDetailView(FormMixin, DetailView):
         
 class ProblemsAPIView(generics.ListAPIView):
     queryset = Problem.objects.all()
-    serializer_class = ProblemSerializer
+    serializer_class = ProblemSerializer    

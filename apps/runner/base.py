@@ -309,6 +309,14 @@ class Runner:
 
         submission.score = solved_count
         submission.status = overall_status
+        if submission.status == self.model.Status.ACCEPTED:
+            already_solved = self.model.objects.filter(
+                user=submission.user,
+                problem=submission.problem,
+                status=self.model.Status.ACCEPTED
+            ).exclude(pk=submission.pk).exists()
+            if not already_solved:
+                submission.user.profile.solved_count += 1
         submission.test_results = test_results
         submission.exec_time_ms = max_elapsed_time
         submission.save(update_fields=["test_results", "exec_time_ms", "score", "status"])
@@ -375,7 +383,7 @@ class Runner:
             if proc.returncode != 0:
                 return {
                     "test": test_num,
-                    "status": "RE",
+                    "status": "CE",
                     "stdout": proc.stdout,
                     "stderr": proc.stderr,
                     "time": elapsed_time
