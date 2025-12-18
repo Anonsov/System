@@ -93,13 +93,21 @@ class TestcaseReturner:
     
     
     def show_testcases(self, limit: int = 3) -> dict:
+        # On platforms like Heroku, media storage can be ephemeral. If tests
+        # haven't been generated (or were wiped), don't crash the page.
+        if not self.tests_path or not os.path.isdir(self.tests_path):
+            return {}
+
         testcases = {}
 
         # pick existing *.in tests in numeric order
-        in_files = sorted(
-            (f for f in os.listdir(self.tests_path) if f.endswith(".in")),
-            key=lambda name: int(name.split(".")[0]),
-        )
+        try:
+            in_files = sorted(
+                (f for f in os.listdir(self.tests_path) if f.endswith(".in")),
+                key=lambda name: int(name.split(".")[0]),
+            )
+        except FileNotFoundError:
+            return {}
 
         for fname in in_files[:limit]:
             i = int(fname.split(".")[0])
@@ -107,7 +115,7 @@ class TestcaseReturner:
             output_path = os.path.join(self.tests_path, f"{i}.out")
 
             # skip not completed pairs
-            if not os.path.exists(output_path):
+            if not os.path.exists(output_path) or not os.path.exists(input_path):
                 continue
 
             input_data = self.open_file_read(input_path)
