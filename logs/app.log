@@ -349,3 +349,22 @@ INFO 2025-12-18 20:29:28,708 autoreload 117179 139741259426752 /home/anonsina/Al
 INFO 2025-12-18 20:29:28,708 autoreload 117179 139741259426752 /home/anonsina/All/System/system/settings.py changed, reloading.
 INFO 2025-12-18 20:29:29,084 autoreload 121647 139772513356736 Watching for file changes with StatReloader
 INFO 2025-12-18 20:29:29,084 autoreload 121647 139772513356736 Watching for file changes with StatReloader
+2025-12-21 17:49:27,806 INFO django.utils.autoreload 9596 140257829485504 Watching for file changes with StatReloader
+2025-12-21 17:49:31,360 INFO django.server 9596 140257722889920 "GET / HTTP/1.1" 200 5315
+2025-12-21 17:49:31,424 INFO django.server 9596 140257714497216 "GET /static/css/base.css HTTP/1.1" 304 0
+2025-12-21 17:49:31,425 INFO django.server 9596 140257706104512 "GET /static/css/home.css HTTP/1.1" 304 0
+2025-12-21 17:49:31,444 INFO django.server 9596 140257722889920 "GET /static/images/logo.png HTTP/1.1" 200 3429829
+2025-12-21 17:49:31,459 WARNING django.request 9596 140257714497216 Not Found: /media/avatars/avatar.jpg
+2025-12-21 17:49:31,459 WARNING django.request 9596 140257697711808 Not Found: /media/avatars/avatar_Impe6kZ.jpg
+2025-12-21 17:49:31,460 WARNING django.server 9596 140257697711808 "GET /media/avatars/avatar_Impe6kZ.jpg HTTP/1.1" 404 4142
+2025-12-21 17:49:31,460 WARNING django.server 9596 140257714497216 "GET /media/avatars/avatar.jpg HTTP/1.1" 404 4110
+2025-12-21 17:49:31,461 INFO django.server 9596 140257706104512 "GET /media/avatars/default_avatar.png HTTP/1.1" 200 95041
+2025-12-21 17:49:32,400 WARNING django.request 9596 140257714497216 Not Found: /favicon.ico
+2025-12-21 17:49:32,400 WARNING django.server 9596 140257714497216 "GET /favicon.ico HTTP/1.1" 404 3859
+2025-12-21 17:49:39,131 INFO django.server 9596 140257714497216 "GET /problems/ HTTP/1.1" 200 5092
+2025-12-21 17:49:39,217 INFO django.server 9596 140257714497216 "GET /static/css/problems.css HTTP/1.1" 304 0
+2025-12-21 17:49:40,644 INFO django.server 9596 140257714497216 "GET /archive/ HTTP/1.1" 200 6536
+2025-12-21 17:49:42,074 INFO django.server 9596 140257714497216 "GET /archive/section/while HTTP/1.1" 200 4463
+2025-12-21 17:49:44,264 INFO django.server 9596 140257714497216 "GET /archive/section/for HTTP/1.1" 200 4461
+2025-12-21 17:49:46,083 INFO django.server 9596 140257714497216 "GET /archive/section/series HTTP/1.1" 200 4464
+2025-12-21 18:03:54,331 INFO django.utils.autoreload 21462 140516020423616 Watching for file changes with StatReloader

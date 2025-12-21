@@ -12,13 +12,6 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 import os
 from pathlib import Path
 import logging
-
-# Optional Heroku helpers
-try:
-    import dj_database_url  # type: ignore
-except Exception:  # pragma: no cover
-    dj_database_url = None
-
 from dotenv import load_dotenv
 load_dotenv()
 
@@ -31,22 +24,10 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 # SECURITY WARNING: keep the secret key used in production secret!
 SECRET_KEY = os.getenv('SECRET_KEY')
-
 # SECURITY WARNING: don't run with debug turned on in production!
-# Accept common truthy values: 1,true,yes,on
-DEBUG = os.getenv("DEBUG", "0").strip().lower() in {"1", "true", "yes", "y", "on"}
+DEBUG = True
 
-# Hosts/origins are comma-separated.
-# Example: ALLOWED_HOSTS=example.com,www.example.com,127.0.0.1
-_allowed_hosts_env = os.getenv("ALLOWED_HOSTS", "").strip()
-ALLOWED_HOSTS = [h.strip() for h in _allowed_hosts_env.split(",") if h.strip()] if _allowed_hosts_env else []
-
-_csrf_trusted_env = os.getenv("CSRF_TRUSTED_ORIGINS", "").strip()
-CSRF_TRUSTED_ORIGINS = [o.strip() for o in _csrf_trusted_env.split(",") if o.strip()] if _csrf_trusted_env else []
-
-# Running behind nginx/reverse proxy
-USE_X_FORWARDED_HOST = True
-SECURE_PROXY_SSL_HEADER = ("HTTP_X_FORWARDED_PROTO", "https")
+ALLOWED_HOSTS = []
 
 
 # Application definition
@@ -72,8 +53,6 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
-    # WhiteNoise for Heroku/static serving without nginx
-    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -105,27 +84,17 @@ WSGI_APPLICATION = 'system.wsgi.application'
 # Database
 # https://docs.djangoproject.com/en/5.2/ref/settings/#databases
 
-# Heroku provides DATABASE_URL; fall back to DB_* for local/docker.
-_database_url = os.getenv("DATABASE_URL", "").strip()
-if _database_url and dj_database_url is not None:
-    DATABASES = {
-        "default": dj_database_url.config(
-            default=_database_url,
-            conn_max_age=int(os.getenv("CONN_MAX_AGE", "600")),
-            ssl_require=os.getenv("DB_SSL_REQUIRE", "1").strip().lower() in {"1", "true", "yes", "y", "on"},
-        )
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.postgresql',
+        # 'NAME': BASE_DIR / 'db.sqlite3',
+        'NAME': os.getenv('DB_NAME'),
+        'USER': os.getenv('DB_USER'),
+        'PASSWORD': os.getenv('DB_PASSWORD'),
+        'HOST': os.getenv('DB_HOST'),
+        'PORT': os.getenv('DB_PORT'),
     }
-else:
-    DATABASES = {
-        'default': {
-            'ENGINE': 'django.db.backends.postgresql',
-            'NAME': os.getenv('DB_NAME'),
-            'USER': os.getenv('DB_USER'),
-            'PASSWORD': os.getenv('DB_PASSWORD'),
-            'HOST': os.getenv('DB_HOST'),
-            'PORT': os.getenv('DB_PORT'),
-        }
-    }
+}
 
 
 # Password validation
@@ -167,14 +136,8 @@ STATICFILES_DIRS = [
     BASE_DIR / 'static',
 ]
 
-# On Heroku, collectstatic writes to STATIC_ROOT and WhiteNoise serves it.
-STATIC_ROOT = os.getenv("STATIC_ROOT", str(BASE_DIR / "staticfiles"))
 
-# WhiteNoise compressed manifest storage (cache-busting)
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-
-# Media
-MEDIA_ROOT = os.getenv("MEDIA_ROOT", str(BASE_DIR / "media"))
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 MEDIA_URL = '/media/'
 
 # Default primary key field type
@@ -211,11 +174,8 @@ CELERY_TASK_ROUTES = {
 CELERY_WORKER_PREFETCH_MULTIPLIER = 1
 CELERY_TASK_ACKS_LATE = True
 
-# Celery
-# Prefer REDIS_URL on Heroku (Heroku Redis add-on), otherwise use explicit CELERY_* vars.
-_redis_url = os.getenv("REDIS_URL", "").strip()
-CELERY_BROKER_URL = os.getenv("CELERY_BROKER_URL") or (_redis_url if _redis_url else "redis://localhost:6379/0")
-CELERY_RESULT_BACKEND = os.getenv("CELERY_RESULT_BACKEND") or (_redis_url if _redis_url else "redis://localhost:6379/0")
+CELERY_BROKER_URL = 'redis://localhost:6379/0'
+CELERY_RESULT_BACKEND = 'redis://localhost:6379/0'
 
 CELERY_WORKER_MAX_TASKS_PER_CHILD = 50
 CELERY_WORKER_MAX_MEMORY_PER_CHILD = 300000
@@ -224,60 +184,31 @@ CELERY_TASK_SOFT_TIME_LIMIT = 120
 CELERY_TASK_TIME_LIMIT = 130
 
 os.makedirs(os.path.join(BASE_DIR, "logs"), exist_ok=True)
-LOG_LEVEL = "INFO"
-LOG_FILE = os.path.join(BASE_DIR, "logs", "app.log")
 
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
     "formatters": {
-        "verbose": {
-            "format": "%(levelname)s %(asctime)s %(module)s %(process)d %(thread)d %(message)s"
-        },
-        "simple": {"format": "%(levelname)s %(message)s"},
+        "simple": {"format": "%(levelname)s %(name)s: %(message)s"},
+        "verbose": {"format": "%(asctime)s %(levelname)s %(name)s %(process)d %(thread)d %(message)s"},
     },
     "handlers": {
-        "console": {
-            "class": "logging.StreamHandler",
-            "formatter": "simple",
-            "level": LOG_LEVEL,
-        },
+        "console": {"class": "logging.StreamHandler", "formatter": "simple", "level": "INFO"},
         "app_file": {
             "class": "logging.handlers.RotatingFileHandler",
-            "filename": LOG_FILE,
+            "filename": os.path.join(BASE_DIR, "logs", "app.log"),
             "maxBytes": 5_000_000,
             "backupCount": 5,
             "encoding": "utf-8",
             "formatter": "verbose",
-            "level": LOG_LEVEL,
-            "delay": True,
+            "level": "INFO",
+            "delay": True,  # avoid opening file at config time
         },
     },
     "loggers": {
-        "": {  # root logger
-            "handlers": ["console", "app_file"],
-            "level": LOG_LEVEL,
-            "propagate": False,
-        },
-        "django": {
-            "handlers": ["console", "app_file"],
-            "level": LOG_LEVEL,
-            "propagate": True,
-        },
-        "apps": {
-            "handlers": ["console", "app_file"],
-            "level": LOG_LEVEL,
-            "propagate": False,
-        },
-        "apps.runner": {
-            "handlers": ["console", "app_file"],
-            "level": LOG_LEVEL,
-            "propagate": False,
-        },
-        "apps.submissions": {
-            "handlers": ["console", "app_file"],
-            "level": LOG_LEVEL,
-            "propagate": False,
-        },
+        "django": {"handlers": ["console", "app_file"], "level": "INFO", "propagate": True},
+        "apps": {"handlers": ["console", "app_file"], "level": "INFO", "propagate": False},
+        "apps.runner": {"handlers": ["console", "app_file"], "level": "INFO", "propagate": False},
+        "apps.submissions": {"handlers": ["console", "app_file"], "level": "INFO", "propagate": False},
     },
 }
